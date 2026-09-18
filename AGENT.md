@@ -3,7 +3,7 @@
 Este archivo define el contexto y las reglas que cualquier agente de Inteligencia Artificial debe seguir al contribuir a este proyecto.
 
 ## 1. Contexto del Proyecto
-AIFindOps es una plataforma de observabilidad y FinOps diseñada para monitorizar, auditar y optimizar el consumo de modelos de Inteligencia Artificial (OpenAI, Gemini, etc.) a nivel organizativo, departamental y de usuario.
+AIFindOps es una plataforma de observabilidad y FindOps diseñada para monitorizar, auditar y optimizar el consumo de modelos de Inteligencia Artificial (OpenAI, Gemini, etc.) a nivel organizativo, departamental y de usuario.
 
 ## 2. Stack Tecnológico
 Todas las implementaciones y resoluciones de problemas deben utilizar estrictamente este stack:
