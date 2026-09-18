@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import { errorHandler } from "./core/middlewares/errorHandler";
+import { notFoundHandler } from "./core/middlewares/notFoundHandler";
+import v1Router from "./api/v1";
 
 const app = express();
 
@@ -11,18 +13,10 @@ app.use(cors());
 app.use(express.json());
 
 // Rutas Base
-const apiV1Router = express.Router();
-
-apiV1Router.get("/health", (req, res) => {
-  res.status(200).json({ status: "OK", timestamp: new Date().toISOString() });
-});
-
-app.use("/api/v1", apiV1Router);
+app.use("/api/v1", v1Router);
 
 // Catch 404
-app.use((req, res) => {
-  res.status(404).json({ error: "Not Found" });
-});
+app.use(notFoundHandler);
 
 // Error Handler Global
 app.use(errorHandler);
