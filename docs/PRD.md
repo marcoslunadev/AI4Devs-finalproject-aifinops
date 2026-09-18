@@ -1,10 +1,10 @@
-# Product Requirements Document (PRD) - AIFinOps
+# Product Requirements Document (PRD) - AIFindOps
 
 ## 1. Introducción y Objetivo
 En la actualidad, las empresas se enfrentan a un crecimiento exponencial y descontrolado en el uso de modelos fundacionales y agentes autónomos de Inteligencia Artificial (OpenAI, Google Gemini, Claude, etc.). Esta situación genera problemas críticos como el *Shadow AI*, facturas impredecibles de proveedores, falta de atribución de costes por centros de responsabilidad y ausencia de métricas de rendimiento y adopción.
 
 **Objetivo del Producto:**
-AIFinOps centraliza la telemetría, auditoría y control financiero del consumo de IA en la empresa, transformando datos crudos de ejecución en información estratégica.
+AIFindOps centraliza la telemetría, auditoría y control financiero del consumo de IA en la empresa, transformando datos crudos de ejecución en información estratégica.
 
 ## 2. Público Objetivo (Target Audience)
 El software está diseñado para los siguientes roles dentro de una organización:

@@ -1,6 +1,6 @@
-# AIFinOps - Plataforma de Observabilidad y FinOps de IA
+# AIFindOps - Plataforma de Observabilidad y FinOps de IA
 
-AIFinOps es una plataforma integral diseñada para monitorizar, auditar y optimizar el consumo de modelos y agentes de IA (OpenAI, Google Gemini, Anthropic, etc.) a nivel de organizaciones, departamentos y usuarios, ofreciendo visibilidad multidimensional filtrable por entornos (DEV, PRE y PRO).
+AIFindOps es una plataforma integral diseñada para monitorizar, auditar y optimizar el consumo de modelos y agentes de IA (OpenAI, Google Gemini, Anthropic, etc.) a nivel de organizaciones, departamentos y usuarios, ofreciendo visibilidad multidimensional filtrable por entornos (DEV, PRE y PRO).
 
 ## 🚀 Requisitos Previos
 
