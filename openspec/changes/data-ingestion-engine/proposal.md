@@ -1,6 +1,6 @@
 ## Why
 
-AIFindOps requires processing potentially large telemetry logs (JSON/CSV) from various AI models and platforms. To avoid memory saturation, we need an asynchronous, streaming-based ingestion engine that can also adapt its parsing logic based on flexible mapping configurations (e.g., dynamically mapping columns based on filename).
+AIFinOps requires processing potentially large telemetry logs (JSON/CSV) from various AI models and platforms. To avoid memory saturation, we need an asynchronous, streaming-based ingestion engine that can also adapt its parsing logic based on flexible mapping configurations (e.g., dynamically mapping columns based on filename).
 
 ## What Changes
 

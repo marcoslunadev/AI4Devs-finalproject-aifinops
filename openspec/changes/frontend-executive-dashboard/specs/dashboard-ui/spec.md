@@ -1,5 +1,5 @@
 ## Purpose
-Define los requisitos visuales, de internacionalización y temáticos para el panel de control principal de AIFindOps, asegurando accesibilidad y usabilidad.
+Define los requisitos visuales, de internacionalización y temáticos para el panel de control principal de AIFinOps, asegurando accesibilidad y usabilidad.
 
 ## ADDED Requirements
 

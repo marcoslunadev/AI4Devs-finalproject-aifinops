@@ -1,5 +1,5 @@
 ## Purpose
-Define el contrato base y la estructura fundacional de la API HTTP de AIFindOps, garantizando consistencia en las respuestas, validación centralizada y seguridad.
+Define el contrato base y la estructura fundacional de la API HTTP de AIFinOps, garantizando consistencia en las respuestas, validación centralizada y seguridad.
 
 ## ADDED Requirements
 
@@ -33,5 +33,5 @@ La API SHALL protegerse activamente contra vectores de ataque comunes web.
 - SHALL aceptar peticiones cross-origin (CORS) estrictamente desde los orígenes del frontend configurados.
 
 #### Scenario: Petición desde el Frontend permitido
-- **WHEN** el frontend de AIFindOps envía una petición al backend
+- **WHEN** el frontend de AIFinOps envía una petición al backend
 - **THEN** el sistema procesa la petición incluyendo los headers CORS correctos (`Access-Control-Allow-Origin`)

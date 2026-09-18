@@ -1,6 +1,6 @@
 ## Why
 
-AIFindOps needs a core executive dashboard to visualize the ingested AI telemetry data. Users require a high-level view of key metrics (KPIs) and the ability to drill down into hierarchical consumption (Organization -> Department -> User) to identify cost anomalies and usage patterns.
+AIFinOps needs a core executive dashboard to visualize the ingested AI telemetry data. Users require a high-level view of key metrics (KPIs) and the ability to drill down into hierarchical consumption (Organization -> Department -> User) to identify cost anomalies and usage patterns.
 
 ## What Changes
 

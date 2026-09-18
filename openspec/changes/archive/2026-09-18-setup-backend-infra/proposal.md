@@ -1,6 +1,6 @@
 ## Why
 
-Con la base de datos ya planificada, el siguiente paso crítico es construir el andamiaje (scaffolding) de la aplicación Node.js/Express. Necesitamos un servidor robusto configurado con TypeScript, Zod y middlewares de seguridad (CORS, Helmet, Error Handler) para poder empezar a implementar la lógica de negocio real de AIFindOps (Ingesta y Métricas).
+Con la base de datos ya planificada, el siguiente paso crítico es construir el andamiaje (scaffolding) de la aplicación Node.js/Express. Necesitamos un servidor robusto configurado con TypeScript, Zod y middlewares de seguridad (CORS, Helmet, Error Handler) para poder empezar a implementar la lógica de negocio real de AIFinOps (Ingesta y Métricas).
 
 ## What Changes
 

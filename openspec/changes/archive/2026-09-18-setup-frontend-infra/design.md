@@ -1,6 +1,6 @@
 ## Context
 
-El backend ya cuenta con la infraestructura base de red y de base de datos preparadas (en las propuestas `setup-backend-infra` y `create-db-infra`). El frontend de AIFindOps necesitará un entorno robusto para poder consumir la API, visualizar grandes volúmenes de datos mediante tablas/gráficos y gestionar estados de filtros.
+El backend ya cuenta con la infraestructura base de red y de base de datos preparadas (en las propuestas `setup-backend-infra` y `create-db-infra`). El frontend de AIFinOps necesitará un entorno robusto para poder consumir la API, visualizar grandes volúmenes de datos mediante tablas/gráficos y gestionar estados de filtros.
 
 ## Goals / Non-Goals
 

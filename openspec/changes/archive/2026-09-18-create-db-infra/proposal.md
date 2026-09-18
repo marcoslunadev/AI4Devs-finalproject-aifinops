@@ -1,6 +1,6 @@
 ## Why
 
-Para poder empezar a construir el backend de AIFindOps (API y servicios), necesitamos contar con la base de persistencia de datos. Actualmente no hay un motor de base de datos levantado ni un modelo estructurado en ORM. Construir la infraestructura de BBDD ahora nos permitirá conectar el motor de Ingesta y el Dashboard en pasos posteriores con una fuente de verdad confiable.
+Para poder empezar a construir el backend de AIFinOps (API y servicios), necesitamos contar con la base de persistencia de datos. Actualmente no hay un motor de base de datos levantado ni un modelo estructurado en ORM. Construir la infraestructura de BBDD ahora nos permitirá conectar el motor de Ingesta y el Dashboard en pasos posteriores con una fuente de verdad confiable.
 
 ## What Changes
 

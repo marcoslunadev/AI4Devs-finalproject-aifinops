@@ -1,6 +1,6 @@
-# AIFindOps - Plataforma de Observabilidad y FindOps de IA
+# AIFinOps - Plataforma de Observabilidad y FinOps de IA
 
-AIFindOps es una plataforma integral diseñada para monitorizar, auditar y optimizar el consumo de modelos y agentes de IA (OpenAI, Google Gemini, Anthropic, etc.) a nivel de organizaciones, departamentos y usuarios, ofreciendo visibilidad multidimensional filtrable por entornos (DEV, PRE y PRO).
+AIFinOps es una plataforma integral diseñada para monitorizar, auditar y optimizar el consumo de modelos y agentes de IA (OpenAI, Google Gemini, Anthropic, etc.) a nivel de organizaciones, departamentos y usuarios, ofreciendo visibilidad multidimensional filtrable por entornos (DEV, PRE y PRO).
 
 ## 🚀 Requisitos Previos
 
@@ -13,8 +13,8 @@ Asegúrate de tener instalados los siguientes componentes antes de iniciar el pr
 
 1. **Clonar el repositorio y acceder al directorio:**
    ```bash
-   git clone https://github.com/marcoslunadev/AI4Devs-finalproject-aifindops.git
-   cd AI4Devs-finalproject-aifindops
+   git clone https://github.com/marcoslunadev/AI4Devs-finalproject-aifinops.git
+   cd AI4Devs-finalproject-aifinops
    ```
 
 2. **Configuración de Variables de Entorno:**

@@ -1,6 +1,6 @@
 ## Context
 
-El backend de AIFindOps arranca sin infraestructura de datos (Ver `proposal.md` para motivación). El sistema debe ser capaz de soportar registros masivos (hasta 10,000 registros por fichero), garantizar integridad multitenant y proporcionar alta precisión matemática para los cálculos de FindOps.
+El backend de AIFinOps arranca sin infraestructura de datos (Ver `proposal.md` para motivación). El sistema debe ser capaz de soportar registros masivos (hasta 10,000 registros por fichero), garantizar integridad multitenant y proporcionar alta precisión matemática para los cálculos de FinOps.
 
 ## Goals / Non-Goals
 
@@ -18,14 +18,14 @@ El backend de AIFindOps arranca sin infraestructura de datos (Ver `proposal.md` 
 ### 1. PostgreSQL 16 vía Docker Compose
 - **Decisión:** Utilizaremos `docker-compose.yml` en la raíz del backend para levantar un contenedor `postgres:16-alpine`.
 - **Rationale:** Permite a cualquier desarrollador levantar el entorno local sin necesidad de instalar dependencias pesadas. La versión 16 es estable y tiene buen soporte para operaciones JSONB que usaremos más adelante.
-- **Alternativa:** Usar SQLite fue descartado porque Prisma con SQLite no soporta completamente características avanzadas de migración, concurrencia masiva (ingesta) ni tipos Decimal estandarizados requeridos para FindOps de la misma forma que Postgres.
+- **Alternativa:** Usar SQLite fue descartado porque Prisma con SQLite no soporta completamente características avanzadas de migración, concurrencia masiva (ingesta) ni tipos Decimal estandarizados requeridos para FinOps de la misma forma que Postgres.
 
 ### 2. Prisma ORM para el Modelo de Datos
 - **Decisión:** Inicialización de Prisma (`npx prisma init`) con provider PostgreSQL.
 - **Rationale:** Proporciona un tipado seguro en TypeScript, algo fundamental dada la adopción de Clean Architecture, permitiendo generar tipos automáticamente para las entidades.
 - **Alternativas:** TypeORM o Sequelize. Fueron descartados porque Prisma ofrece una mejor experiencia de desarrollador (DX) y esquemas declarativos limpios (`schema.prisma`) que sirven como documentación del negocio.
 
-### 3. Precisión Numérica (FindOps)
+### 3. Precisión Numérica (FinOps)
 - **Decisión:** Todos los campos de coste (`cost`, `inputCost`, `outputCost`) en `ExecutionLog` usarán el tipo `Decimal` nativo de PostgreSQL (ej. `Decimal(12, 6)`).
 - **Rationale:** Requisito indispensable para que las analíticas de costes agregados no sufran desajustes al sumar cientos de miles de céntimos en coma flotante.
 

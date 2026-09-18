@@ -2,11 +2,11 @@ version: "3.8"
 services:
   db:
     image: postgres:16-alpine
-    container_name: aifindops_db
+    container_name: aifinops_db
     environment:
-      POSTGRES_USER: aifindops
+      POSTGRES_USER: aifinops
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: aifindops
+      POSTGRES_DB: aifinops
     ports:
       - "5432:5432"
     volumes:

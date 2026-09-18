@@ -1,5 +1,5 @@
 ## Purpose
-Define la estructura fundacional, la arquitectura del estado del cliente y la estrategia visual base (Tailwind) para el frontend de AIFindOps.
+Define la estructura fundacional, la arquitectura del estado del cliente y la estrategia visual base (Tailwind) para el frontend de AIFinOps.
 
 ## Requirements
 

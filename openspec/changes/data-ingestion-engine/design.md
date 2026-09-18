@@ -1,6 +1,6 @@
 ## Context
 
-AIFindOps needs to ingest potentially massive telemetry files from various AI providers. The current backend uses Node.js and Express, which is single-threaded. Loading huge files into memory or blocking the event loop would degrade API performance for other requests. See proposal.md for motivation.
+AIFinOps needs to ingest potentially massive telemetry files from various AI providers. The current backend uses Node.js and Express, which is single-threaded. Loading huge files into memory or blocking the event loop would degrade API performance for other requests. See proposal.md for motivation.
 
 ## Goals / Non-Goals
 

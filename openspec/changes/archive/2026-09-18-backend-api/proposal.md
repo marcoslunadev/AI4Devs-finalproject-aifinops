@@ -1,6 +1,6 @@
 ## Why
 
-Se necesita implementar la estructura fundacional de la API HTTP de AIFindOps basándose en el contrato definido previamente en `openspec/specs/backend-api/spec.md`. Esto garantizará consistencia en las respuestas, validación centralizada de Zod y seguridad básica (Helmet, CORS) antes de desarrollar endpoints específicos.
+Se necesita implementar la estructura fundacional de la API HTTP de AIFinOps basándose en el contrato definido previamente en `openspec/specs/backend-api/spec.md`. Esto garantizará consistencia en las respuestas, validación centralizada de Zod y seguridad básica (Helmet, CORS) antes de desarrollar endpoints específicos.
 
 ## What Changes
 

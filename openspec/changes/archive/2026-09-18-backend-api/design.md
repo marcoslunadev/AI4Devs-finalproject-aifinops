@@ -21,7 +21,7 @@ El proyecto requiere asentar las bases del backend para procesar peticiones de f
 
 **1. Manejo de Errores Centralizado (Error Handler)**
 - **Decisión**: Crear un middleware `errorHandler.ts` que se inserte al final de la cadena de middlewares de Express.
-- **Rationale**: Express no captura por defecto excepciones asíncronas ni formatea las respuestas, y AIFindOps utilizará Zod extensivamente. Un middleware global unifica el formato JSON de error (ej. `{ error: "message", details: [...] }`), asegurando de que los stack traces no se filtren en `NODE_ENV=production`.
+- **Rationale**: Express no captura por defecto excepciones asíncronas ni formatea las respuestas, y AIFinOps utilizará Zod extensivamente. Un middleware global unifica el formato JSON de error (ej. `{ error: "message", details: [...] }`), asegurando de que los stack traces no se filtren en `NODE_ENV=production`.
 - **Alternativa**: Capturar y formatear errores en cada controlador de ruta (rechazado por ser repetitivo y propenso a errores).
 
 **2. Prefijo `/api/v1`**

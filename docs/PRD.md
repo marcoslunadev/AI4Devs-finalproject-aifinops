@@ -1,14 +1,14 @@
-# Product Requirements Document (PRD) - AIFindOps
+# Product Requirements Document (PRD) - AIFinOps
 
 ---
 
 ## 1. Resumen ejecutivo
 
 **Objetivo del Producto:**
-En la actualidad, las empresas se enfrentan a un crecimiento exponencial y descontrolado en el uso de modelos fundacionales y agentes autónomos de Inteligencia Artificial (OpenAI, Google Gemini, Claude, etc.). Esta situación genera problemas críticos como el *Shadow AI*, facturas impredecibles de proveedores, falta de atribución de costes por centros de responsabilidad y ausencia de métricas de rendimiento. AIFindOps centraliza la telemetría, auditoría y control financiero del consumo de IA, transformando datos crudos en información estratégica.
+En la actualidad, las empresas se enfrentan a un crecimiento exponencial y descontrolado en el uso de modelos fundacionales y agentes autónomos de Inteligencia Artificial (OpenAI, Google Gemini, Claude, etc.). Esta situación genera problemas críticos como el *Shadow AI*, facturas impredecibles de proveedores, falta de atribución de costes por centros de responsabilidad y ausencia de métricas de rendimiento. AIFinOps centraliza la telemetría, auditoría y control financiero del consumo de IA, transformando datos crudos en información estratégica.
 
 **Qué es:**
-Una plataforma integral de observabilidad y FindOps de IA diseñada para monitorizar, auditar y optimizar el consumo a nivel de organizaciones, departamentos y usuarios, ofreciendo una visibilidad multidimensional.
+Una plataforma integral de observabilidad y FinOps de IA diseñada para monitorizar, auditar y optimizar el consumo a nivel de organizaciones, departamentos y usuarios, ofreciendo una visibilidad multidimensional.
 
 ### Qué NO incluye el MVP (out of scope explícito)
 - Conectores en tiempo real directos a las APIs de los proveedores (la ingesta será vía subida de ficheros de logs).
@@ -34,7 +34,7 @@ Una plataforma integral de observabilidad y FindOps de IA diseñada para monitor
 ## 3. Requisitos funcionales
 
 ### 3.1 — Autenticación y Autorización
-AIFindOps maneja información financiera sensible, por lo que requiere control de acceso estricto.
+AIFinOps maneja información financiera sensible, por lo que requiere control de acceso estricto.
 - **Autenticación:** Los usuarios deben iniciar sesión con credenciales (email y contraseña) validadas contra la base de datos (hashing con bcrypt y tokens JWT).
 - **RBAC Jerárquico:** Existen roles definidos (SuperAdmin, Org Manager, Dept Manager, Auditor) que determinan qué nivel de los datos (Organización, Departamento, o globales) puede visualizar cada usuario.
 
@@ -102,6 +102,6 @@ El MVP se considerará exitoso si cumple con los siguientes hitos:
 
 - **Agente de IA:** Entidad lógica o aplicación que consume modelos de IA para realizar una tarea.
 - **Telemetría:** Datos crudos resultantes de la ejecución de una IA (ej. tokens usados, tiempo de respuesta).
-- **FindOps:** Práctica de gestión financiera en la nube, en este caso aplicada al control de costes de IA.
+- **FinOps:** Práctica de gestión financiera en la nube, en este caso aplicada al control de costes de IA.
 - **Shadow AI:** Uso no autorizado o no trackeado de modelos de IA por parte de los empleados.
 - **Drill-Down:** Capacidad de navegar desde datos agregados generales hacia los detalles más granulares.

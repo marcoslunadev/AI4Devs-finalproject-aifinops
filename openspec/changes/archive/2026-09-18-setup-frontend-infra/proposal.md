@@ -1,6 +1,6 @@
 ## Why
 
-Con la base de datos y el backend planificados, necesitamos sentar las bases del Frontend de AIFindOps. El frontend es crítico ya que alojará el Dashboard Ejecutivo y las tablas de Drill-Down. Iniciar la aplicación con React y Vite garantiza un entorno de desarrollo rápido y moderno.
+Con la base de datos y el backend planificados, necesitamos sentar las bases del Frontend de AIFinOps. El frontend es crítico ya que alojará el Dashboard Ejecutivo y las tablas de Drill-Down. Iniciar la aplicación con React y Vite garantiza un entorno de desarrollo rápido y moderno.
 
 ## What Changes
 
@@ -13,7 +13,7 @@ Con la base de datos y el backend planificados, necesitamos sentar las bases del
 ## Capabilities
 
 ### New Capabilities
-- `frontend-app`: Define la arquitectura base del cliente web, la estrategia de enrutamiento y el sistema de diseño visual (UI) para AIFindOps.
+- `frontend-app`: Define la arquitectura base del cliente web, la estrategia de enrutamiento y el sistema de diseño visual (UI) para AIFinOps.
 
 ### Modified Capabilities
 <!-- No requirement changes in existing capabilities for this task -->

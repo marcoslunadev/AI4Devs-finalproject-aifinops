@@ -1,5 +1,5 @@
 ## Purpose
-Define la estructura fundacional de datos relacional para el sistema AIFindOps, proporcionando soporte estricto para multi-tenant y análisis de telemetría financiera precisa mediante tipos Decimal.
+Define la estructura fundacional de datos relacional para el sistema AIFinOps, proporcionando soporte estricto para multi-tenant y análisis de telemetría financiera precisa mediante tipos Decimal.
 
 ## Requirements
 
@@ -14,7 +14,7 @@ El sistema de datos SHALL soportar una jerarquía de inquilinos de tres niveles:
 - **THEN** la base de datos exige obligatoriamente su enlace con un `organizationId` existente
 - **AND** opcionalmente enlaza con un `departmentId`
 
-### Requirement: Almacenamiento Preciso de Telemetría (FindOps)
+### Requirement: Almacenamiento Preciso de Telemetría (FinOps)
 El sistema SHALL almacenar la información de los eventos de IA en una tabla `ExecutionLog` con tipos de datos de precisión para cálculos financieros.
 - Los campos que almacenen dinero (e.g. costes de IA) SHALL usar el tipo nativo `Decimal` en lugar de flotantes imprecisos.
 - Los registros de telemetría SHALL tener integridad referencial con el `Usuario` que ejecutó el evento (y por consiguiente con su Org/Dept) y con el modelo de IA (`AiModel`) utilizado.
