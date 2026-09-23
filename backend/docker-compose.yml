@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_USER: aifinops
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: aifinops
+      POSTGRES_DB: aifinops_db
     ports:
       - "5432:5432"
     volumes:

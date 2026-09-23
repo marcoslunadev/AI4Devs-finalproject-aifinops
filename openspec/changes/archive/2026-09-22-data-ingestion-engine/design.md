@@ -20,10 +20,10 @@ AIFinOps needs to ingest potentially massive telemetry files from various AI pro
 **Alternativas consideradas**: `papaparse` o cargar todo en memoria.
 **Rationale**: `csv-parse` implementa la API nativa de Streams de Node.js, permitiendo backpressure y procesamiento por chunks, lo cual mantiene la memoria controlada a unos pocos MBs.
 
-### Decisión 2: Patrón Adapter para el Mapeo Dinámico
-**Opción seleccionada**: Interfaz `LogAdapter` con implementaciones como `OpenAIAdapter`, `AzureAdapter`, etc.
-**Alternativas consideradas**: Configuraciones JSON estáticas.
-**Rationale**: Una interfaz en código (TypeScript) permite conversiones complejas (ej. calcular coste si el CSV solo trae tokens, parsear fechas en distintos formatos) que un simple JSON de mapeo 1:1 no permitiría. La selección del adaptador se hará mediante expresiones regulares sobre el nombre del archivo (ej. `/azure/i.test(filename)`).
+### Decisión 2: Patrón Adapter para el Mapeo Dinámico y Extracción de Contexto
+**Opción seleccionada**: Interfaz `LogAdapter` con implementaciones como `OpenAIAdapter`, `AzureAdapter`, etc. Adicionalmente, el `IngestionService` extrae la Organización y Entorno del nombre del archivo (formato `[Org]_[Env]_...`) y lo pasa como contexto a los adaptadores para que lo inyecten en los `metadata` de `ExecutionLog`.
+**Alternativas consideradas**: Configuraciones JSON estáticas o forzar al usuario a enviar metadata explícita vía API.
+**Rationale**: Una interfaz en código (TypeScript) permite conversiones complejas (ej. calcular coste si el CSV solo trae tokens, parsear fechas en distintos formatos) que un simple JSON de mapeo 1:1 no permitiría. La selección del adaptador se hará mediante expresiones regulares sobre el nombre del archivo (ej. `/azure/i.test(filename)`). Usar la convención de nombre de archivo para inyectar Organización y Entorno mantiene la API limpia (sin necesidad de payload extra complejo) y es fácil de automatizar para los publicadores de logs.
 
 ### Decisión 3: Procesamiento Asíncrono "In-Memory Queue" (MVP)
 **Opción seleccionada**: Una vez recibido el archivo, responder 202 Accepted, e iniciar el stream en un bloque de ejecución en background (Promesa suelta o Worker Thread sencillo), actualizando `IngestionAuditLog`.

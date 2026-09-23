@@ -5,8 +5,8 @@ AIFinOps es una plataforma integral diseñada para monitorizar, auditar y optimi
 ## 🚀 Requisitos Previos
 
 Asegúrate de tener instalados los siguientes componentes antes de iniciar el proyecto:
-- **Node.js** (v18+)
-- **NPM** (v9+)
+- **Node.js** (v22+ LTS)
+- **NPM** (v10+)
 - **Docker Desktop** (o Docker Engine con Docker Compose v2+)
 
 ## 🛠️ Instalación y Configuración Inicial

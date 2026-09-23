@@ -6,6 +6,7 @@ AIFinOps requires processing potentially large telemetry logs (JSON/CSV) from va
 
 - Implementation of a streaming parser for large CSV/JSON logs to ensure low memory footprint.
 - A dynamic mapping layer that configures how input data maps to the `ExecutionLog` Prisma schema based on parameters like the filename.
+- Extraction of contextual data (Organization and Environment) directly from the filename (e.g., `VASS_PROD_...`) to inject into metadata.
 - An asynchronous ingestion worker or service that handles the parsing in the background and logs progress to `IngestionAuditLog`.
 - New API endpoints to upload files and trigger the async ingestion process.
 

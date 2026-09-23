@@ -1,0 +1,5 @@
+user_id,ai_model,total_cost,resourceId,region,date
+user-123,azure-gpt-4,0.025,res-eus-01,eastus,2026-09-22T11:00:00Z
+user-456,azure-gpt-35,0.005,res-eus-02,eastus,2026-09-22T11:05:00Z
+user-123,azure-dalle-3,0.040,res-wus-01,westus,2026-09-22T11:10:00Z
+user-999,azure-gpt-4o,0.015,res-eus-01,eastus,2026-09-22T11:15:00Z

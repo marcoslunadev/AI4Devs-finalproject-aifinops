@@ -17,9 +17,10 @@ El sistema SHALL permitir al usuario alternar entre modos de visualización clar
 - **WHEN** el usuario hace clic en el botón de "Modo Oscuro"
 - **THEN** el sistema aplica las clases de TailwindCSS correspondientes invirtiendo los colores de fondo y texto adecuadamente
 
-### Requirement: Visualización de KPIs y Tabla Jerárquica
-El Dashboard SHALL presentar tarjetas de métricas clave (KPIs) globales y una tabla interactiva para desglosar datos por Organización, Departamento y Usuario. Además, SHALL integrar gráficos (`recharts`) para ilustrar el consumo a lo largo del tiempo.
+### Requirement: Visualización de KPIs y Tabla Jerárquica (Executive Dashboard)
+El Dashboard SHALL presentar en su cabecera 6 tarjetas de métricas clave (Total Cost, Total Executions, Total Tokens, Avg Cost per Execution, Active Organizations, Error Rate) con indicadores de tendencia (micro-sparklines o variaciones porcentuales). Además, SHALL presentar una tabla interactiva para desglosar datos financieros y de uso por Organización.
 
-#### Scenario: Visualización interactiva de Drill-Down
-- **WHEN** el usuario visualiza la tabla en el nivel "Organización" y hace clic en una fila
-- **THEN** la tabla se actualiza o expande para mostrar los Departamentos que pertenecen a esa Organización
+#### Scenario: Visualización interactiva de Drill-Down por Entorno
+- **WHEN** el usuario visualiza la tabla en el nivel "Organización" (ej. VASS) y hace clic en el icono de expandir
+- **THEN** la tabla despliega filas anidadas mostrando los datos de los Entornos que pertenecen a esa Organización (PROD, PRE, DEV)
+- **AND** alinea las columnas de los entornos exactamente bajo las columnas de la organización padre, mostrando "No Data" o "—" si un entorno no tiene consumo en el periodo seleccionado

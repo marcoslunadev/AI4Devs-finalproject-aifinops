@@ -1,0 +1,5 @@
+userId,model,cost,promptCost,completionCost,tokens,promptTokens,completionTokens,timestamp
+user-123,gpt-4-turbo,0.015,0.005,0.010,150,50,100,2026-09-22T10:00:00Z
+user-456,gpt-3.5-turbo,0.002,0.001,0.001,200,100,100,2026-09-22T10:05:00Z
+user-123,gpt-4,0.030,0.010,0.020,300,100,200,2026-09-22T10:10:00Z
+user-789,gpt-4-turbo,0.045,0.015,0.030,450,150,300,2026-09-22T10:15:00Z
