@@ -4,6 +4,7 @@ context: |
   Monorepo full-stack de observabilidad y FinOps de IA (AIFinOps).
   Backend: Node.js + Express (TypeScript) + Clean Architecture + Prisma ORM + PostgreSQL 16.
   Frontend: React 18+ + Vite + TypeScript + TailwindCSS + Recharts + Zustand/React Query.
+  Al implementar cualquier cambio en el Frontend/React, es OBLIGATORIO consultar y aplicar las pautas de la skill react-expert (`.agent/skills/react-expert/SKILL.md` o `.opencode/skills/react-expert/SKILL.md`).
   Convenciones: lógica centralizada en Services (separación estricta de Controllers y Repositories), 
   validación de datos de entrada con Zod, manejo de esquemas centralizado en schema.prisma.
   Rutas bajo /api/v1; autenticación y control de acceso (RBAC) gestionado vía JWT middleware.

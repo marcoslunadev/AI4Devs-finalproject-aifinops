@@ -1,20 +1,16 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { DashboardLayout } from "./components/DashboardLayout";
+import { Dashboard } from "./pages/Dashboard";
 import "./App.css";
-
-function Dashboard() {
-  return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-blue-600">AIFinOps Dashboard</h1>
-    </div>
-  );
-}
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-      </Routes>
+      <DashboardLayout>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+        </Routes>
+      </DashboardLayout>
     </BrowserRouter>
   );
 }

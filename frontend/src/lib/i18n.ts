@@ -1,0 +1,140 @@
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+
+const resources = {
+  es: {
+    translation: {
+      header: {
+        title: "AIFinOps Executive Dashboard",
+        subtitle: "Control de costes y consumo de IA en tiempo real",
+        searchPlaceholder: "Buscar organizaciones, proyectos...",
+        themeLight: "Modo Claro",
+        themeDark: "Modo Oscuro",
+        language: "Idioma",
+        langEs: "Español",
+        langEn: "English",
+        notifications: "Notificaciones",
+        profile: "Perfil de Ejecutivo",
+      },
+      kpis: {
+        totalCost: "Coste Total",
+        totalCostDesc: "Gasto acumulado este mes",
+        totalExecutions: "Ejecuciones Totales",
+        totalExecutionsDesc: "Llamadas a APIs de modelos",
+        totalTokens: "Tokens Totales",
+        totalTokensDesc: "Input + Output procesados",
+        avgCostPerExec: "Coste Promedio / Ej.",
+        avgCostPerExecDesc: "Eficiencia de costes por llamada",
+        activeOrgs: "Organizaciones Activas",
+        activeOrgsDesc: "Centros de coste operativos",
+        errorRate: "Tasa de Error",
+        errorRateDesc: "Fallos de API y timeouts",
+        vsLastMonth: "vs mes anterior",
+      },
+      charts: {
+        costEvolutionTitle: "Evolución Temporal de Costes y Tokens",
+        costEvolutionSubtitle: "Análisis diario del gasto ($ USD) y volumen de tokens (k-Tokens)",
+        legendCost: "Coste ($)",
+        legendTokens: "Tokens (Miles)",
+        tooltipDate: "Fecha",
+      },
+      table: {
+        title: "Desglose Jerárquico por Organización y Entorno",
+        subtitle: "Navegación en profundidad: Organización → Entornos (PROD, PRE, DEV) → Usuarios",
+        searchPlaceholder: "Filtrar por nombre...",
+        columnName: "Entidad / Entorno",
+        columnStatus: "Estado",
+        columnCurrentCost: "Coste Mes Actual",
+        columnExecutions: "Ejecuciones",
+        columnTokens: "Tokens Totales",
+        columnBudget: "Presupuesto Asignado",
+        columnBurn: "Budget Burn",
+        columnActions: "Acciones",
+        noData: "Sin Datos",
+        expandedDetails: "Detalles",
+        collapseAll: "Contraer todo",
+        expandAll: "Expandir todo",
+        levelOrg: "Organización",
+        levelEnv: "Entorno",
+        levelUser: "Usuario / Dept",
+      },
+      footer: {
+        rights: "AIFinOps Telemetry Platform. Todos los derechos reservados.",
+        lastSync: "Última sincronización de telemetría hace 2 min",
+      },
+    },
+  },
+  en: {
+    translation: {
+      header: {
+        title: "AIFinOps Executive Dashboard",
+        subtitle: "Real-time AI cost & telemetry control",
+        searchPlaceholder: "Search organizations, projects...",
+        themeLight: "Light Mode",
+        themeDark: "Dark Mode",
+        language: "Language",
+        langEs: "Español",
+        langEn: "English",
+        notifications: "Notifications",
+        profile: "Executive Profile",
+      },
+      kpis: {
+        totalCost: "Total Cost",
+        totalCostDesc: "Accumulated spend this month",
+        totalExecutions: "Total Executions",
+        totalExecutionsDesc: "Model API calls",
+        totalTokens: "Total Tokens",
+        totalTokensDesc: "Input + Output processed",
+        avgCostPerExec: "Avg Cost / Exec",
+        avgCostPerExecDesc: "Cost efficiency per call",
+        activeOrgs: "Active Organizations",
+        activeOrgsDesc: "Active cost centers",
+        errorRate: "Error Rate",
+        errorRateDesc: "API failures & timeouts",
+        vsLastMonth: "vs last month",
+      },
+      charts: {
+        costEvolutionTitle: "Cost & Token Time Series Evolution",
+        costEvolutionSubtitle: "Daily breakdown of spend ($ USD) and token volume (k-Tokens)",
+        legendCost: "Cost ($)",
+        legendTokens: "Tokens (Thousands)",
+        tooltipDate: "Date",
+      },
+      table: {
+        title: "Hierarchical Breakdown by Organization & Environment",
+        subtitle: "Drill-down: Organization → Environments (PROD, STAG, DEV) → Users",
+        searchPlaceholder: "Filter by name...",
+        columnName: "Entity / Environment",
+        columnStatus: "Status",
+        columnCurrentCost: "Current Month Cost",
+        columnExecutions: "Executions",
+        columnTokens: "Total Tokens",
+        columnBudget: "Allocated Budget",
+        columnBurn: "Budget Burn",
+        columnActions: "Actions",
+        noData: "No Data",
+        expandedDetails: "Details",
+        collapseAll: "Collapse all",
+        expandAll: "Expand all",
+        levelOrg: "Organization",
+        levelEnv: "Environment",
+        levelUser: "User / Dept",
+      },
+      footer: {
+        rights: "AIFinOps Telemetry Platform. All rights reserved.",
+        lastSync: "Last telemetry sync 2 mins ago",
+      },
+    },
+  },
+};
+
+i18n.use(initReactI18next).init({
+  resources,
+  lng: "es", // Spanish as default per requirements
+  fallbackLng: "en",
+  interpolation: {
+    escapeValue: false, // React handles XSS
+  },
+});
+
+export default i18n;
