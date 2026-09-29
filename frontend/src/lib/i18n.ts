@@ -58,6 +58,23 @@ const resources = {
         levelEnv: "Entorno",
         levelUser: "Usuario / Dept",
       },
+      nav: {
+        executiveOverview: "Vista Ejecutiva Global",
+        modelAnalytics: "Analítica por Modelo y Proveedor",
+      },
+      analytics: {
+        title: "Analítica Detallada por Modelo y Proveedor",
+        subtitle: "Visualización avanzada de cuota de mercado, ratios de tokens e indicadores de latencia/coste por modelo LLM.",
+        distributionTitle: "Distribución de Gasto por Proveedor",
+        distributionSubtitle: "Cuota de mercado y gasto total acumulado por proveedor de LLMs.",
+        ratioTitle: "Relación Input vs Output Tokens",
+        ratioSubtitle: "Comparativa de tokens de contexto (Entrada) frente a tokens generados (Salida) por modelo.",
+        efficiencyTitle: "Matriz de Eficiencia (Latencia vs Coste)",
+        efficiencySubtitle: "Relación de velocidad de respuesta (ms) frente al coste por 1.000 tokens.",
+        topModel: "Modelo Más Utilizado",
+        mostEfficient: "Modelo Más Eficiente",
+        avgLatency: "Latencia Promedio Global",
+      },
       footer: {
         rights: "AIFinOps Telemetry Platform. Todos los derechos reservados.",
         lastSync: "Última sincronización de telemetría hace 2 min",
@@ -66,6 +83,23 @@ const resources = {
   },
   en: {
     translation: {
+      nav: {
+        executiveOverview: "Executive Overview",
+        modelAnalytics: "Model & Provider Analytics",
+      },
+      analytics: {
+        title: "Detailed Model & Provider Analytics",
+        subtitle: "Advanced breakdown of market share, token ratios, and latency vs. cost efficiency for LLM models.",
+        distributionTitle: "Spend Distribution by Provider",
+        distributionSubtitle: "Market share and cumulative spend per AI model provider.",
+        ratioTitle: "Input vs Output Token Ratio",
+        ratioSubtitle: "Comparison of prompt context tokens vs generated completion tokens per model.",
+        efficiencyTitle: "Efficiency Matrix (Latency vs Cost)",
+        efficiencySubtitle: "Response latency (ms) vs cost per 1,000 tokens.",
+        topModel: "Top Used Model",
+        mostEfficient: "Most Cost-Efficient Model",
+        avgLatency: "Global Avg Latency",
+      },
       header: {
         title: "AIFinOps Executive Dashboard",
         subtitle: "Real-time AI cost & telemetry control",

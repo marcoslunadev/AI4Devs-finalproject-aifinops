@@ -90,8 +90,15 @@ export const CostChart: React.FC<CostChartProps> = ({ data }) => {
       </div>
 
       {/* Chart visualization */}
-      <div className="h-72 w-full pt-2">
-        <ResponsiveContainer width="100%" height="100%">
+      {filteredData.length === 0 ? (
+        <div className="h-72 w-full flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-950/40">
+          <Calendar className="w-8 h-8 mb-2 opacity-40 text-indigo-500" />
+          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">No hay datos de telemetría registrados</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">No se encontraron ejecuciones para el rango seleccionado.</p>
+        </div>
+      ) : (
+        <div className="h-72 w-full pt-2">
+          <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             data={filteredData}
             margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
@@ -208,6 +215,7 @@ export const CostChart: React.FC<CostChartProps> = ({ data }) => {
           </ComposedChart>
         </ResponsiveContainer>
       </div>
+      )}
     </div>
   );
 };

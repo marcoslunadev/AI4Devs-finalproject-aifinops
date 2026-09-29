@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ingestionRouter from "../../modules/ingestion/routes/ingestionRoutes";
+import telemetryRouter from "../../modules/telemetry/routes/telemetryRoutes";
 
 const v1Router = Router();
 
@@ -8,5 +9,6 @@ v1Router.get("/health", (req, res) => {
 });
 
 v1Router.use("/ingestion", ingestionRouter);
+v1Router.use("/telemetry", telemetryRouter);
 
 export default v1Router;

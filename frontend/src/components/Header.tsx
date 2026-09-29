@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "./ThemeProvider";
+import { NotificationDrawer } from "./alerts/NotificationDrawer";
+import { useAlertStore } from "../store/alertStore";
 import {
   Sun,
   Moon,
@@ -15,6 +17,8 @@ import {
 export const Header: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
+  const { unreadCount } = useAlertStore();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const currentLang = i18n.language || "es";
 
@@ -51,7 +55,7 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Search Bar & Actions */}
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 relative">
             {/* Search Input */}
             <div className="relative hidden md:block w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -103,14 +107,26 @@ export const Header: React.FC = () => {
               )}
             </button>
 
-            {/* Notifications */}
-            <button
-              className="relative p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700/80 transition shadow-xs hidden xs:flex"
-              title={t("header.notifications")}
-            >
-              <Bell className="w-4 h-4" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900 animate-pulse" />
-            </button>
+            {/* Notifications Button with Drawer Toggle */}
+            <div className="relative">
+              <button
+                onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+                className="relative p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700/80 transition shadow-xs flex items-center justify-center"
+                title={t("header.notifications")}
+              >
+                <Bell className="w-4 h-4" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-extrabold text-white ring-2 ring-white dark:ring-slate-900 animate-pulse">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+
+              <NotificationDrawer
+                isOpen={isDrawerOpen}
+                onClose={() => setIsDrawerOpen(false)}
+              />
+            </div>
 
             {/* Profile Avatar */}
             <div className="flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-slate-800">
