@@ -4,6 +4,10 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   es: {
     translation: {
+      common: {
+        orgSelectorAll: "Todas las Entidades",
+        orgSelectorLabel: "Seleccionar Entidad / Ámbito",
+      },
       header: {
         title: "AIFinOps Executive Dashboard",
         subtitle: "Control de costes y consumo de IA en tiempo real",
@@ -111,6 +115,7 @@ const resources = {
       nav: {
         executiveOverview: "Vista Ejecutiva Global",
         modelAnalytics: "Analítica por Modelo y Proveedor",
+        departmentAnalytics: "Ejecuciones por Departamento",
       },
       analytics: {
         badge: "AI Intelligence & Model Intelligence",
@@ -143,6 +148,26 @@ const resources = {
         latencyAxis: "Latencia",
         costAxis: "Coste / 1k",
       },
+      executionAnalytics: {
+        title: "Desglose por Departamento y Modelo",
+        subtitle: "Análisis detallado de ejecuciones, tokens y latencia agrupados por entidad y departamento",
+        totalCalls: "Llamadas",
+        totalCost: "Coste Total",
+        filterPlaceholder: "Filtrar por departamento o modelo...",
+        reload: "Recargar",
+        loading: "Cargando métricas de ejecuciones...",
+        error: "Error al obtener las ejecuciones por departamento.",
+        retry: "Reintentar",
+        noData: "No se encontraron ejecuciones registradas para la selección actual.",
+        colOrg: "Entidad / Organización",
+        colDept: "Departamento",
+        colModel: "Modelo LLM",
+        colCalls: "Llamadas",
+        colPromptTokens: "Prompt Tokens",
+        colCompletionTokens: "Completion Tokens",
+        colCost: "Coste Acumulado",
+        colLatency: "Latencia Promedio",
+      },
       footer: {
         rights: "AIFinOps Telemetry Platform. Todos los derechos reservados.",
         lastSync: "Última sincronización de telemetría hace 2 min",
@@ -151,6 +176,10 @@ const resources = {
   },
   en: {
     translation: {
+      common: {
+        orgSelectorAll: "All Organizations",
+        orgSelectorLabel: "Select Organization / Scope",
+      },
       header: {
         title: "AIFinOps Executive Dashboard",
         subtitle: "Real-time AI cost & telemetry control",
@@ -258,6 +287,7 @@ const resources = {
       nav: {
         executiveOverview: "Executive Overview",
         modelAnalytics: "Model & Provider Analytics",
+        departmentAnalytics: "Department Executions",
       },
       analytics: {
         badge: "AI Intelligence & Model Intelligence",
@@ -289,6 +319,26 @@ const resources = {
         modelsScatterName: "Models",
         latencyAxis: "Latency",
         costAxis: "Cost / 1k",
+      },
+      executionAnalytics: {
+        title: "Department & Model Breakdown",
+        subtitle: "Detailed analysis of executions, tokens, and latency grouped by entity and department",
+        totalCalls: "Calls",
+        totalCost: "Total Cost",
+        filterPlaceholder: "Filter by department or model...",
+        reload: "Reload",
+        loading: "Loading execution metrics...",
+        error: "Failed to fetch department executions.",
+        retry: "Retry",
+        noData: "No execution logs found for the current selection.",
+        colOrg: "Entity / Organization",
+        colDept: "Department",
+        colModel: "LLM Model",
+        colCalls: "Calls",
+        colPromptTokens: "Prompt Tokens",
+        colCompletionTokens: "Completion Tokens",
+        colCost: "Cumulative Cost",
+        colLatency: "Avg Latency",
       },
       footer: {
         rights: "AIFinOps Telemetry Platform. All rights reserved.",

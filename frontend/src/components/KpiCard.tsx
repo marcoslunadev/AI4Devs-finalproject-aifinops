@@ -53,7 +53,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
 
       {/* Top Header: Title & Icon */}
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">
+        <span className="text-[11px] sm:text-xs font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider leading-snug min-h-[2rem] flex items-center pr-1">
           {title}
         </span>
         <div className={`p-2.5 rounded-xl bg-gradient-to-br ${gradient} text-white shadow-md shrink-0 group-hover:scale-105 transition-transform duration-200`}>

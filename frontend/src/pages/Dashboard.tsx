@@ -33,8 +33,12 @@ import {
   Clock,
 } from "lucide-react";
 
+import { useSearchParams } from "react-router-dom";
+
 export const Dashboard: React.FC = () => {
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const organizationId = searchParams.get("organizationId") || undefined;
   const [chartRange, setChartRange] = useState<string>("30d");
 
   // React Query Custom Hooks
@@ -43,21 +47,22 @@ export const Dashboard: React.FC = () => {
     isLoading: kpisLoading,
     isError: kpisError,
     refetch: refetchKpis,
-  } = useTelemetryKpis();
+  } = useTelemetryKpis(organizationId);
 
   const {
     data: chartData,
     isLoading: chartLoading,
     isError: chartError,
     refetch: refetchChart,
-  } = useTelemetryChart(chartRange);
+  } = useTelemetryChart(chartRange, organizationId);
 
   const {
     data: breakdownData,
     isLoading: breakdownLoading,
     isError: breakdownError,
     refetch: refetchBreakdown,
-  } = useTelemetryBreakdown();
+  } = useTelemetryBreakdown(organizationId);
+
 
   const { data: telemetryStatus } = useTelemetryStatus();
 

@@ -4,34 +4,56 @@ import {
   fetchTelemetryChart,
   fetchTelemetryBreakdown,
   fetchTelemetryStatus,
+  fetchOrganizations,
+  fetchDepartmentExecutions,
   type TelemetryKpis,
   type TelemetryStatus,
+  type OrganizationItem,
+  type DepartmentExecution,
 } from "../services/telemetryApi";
 import { type ChartDataPoint } from "../components/CostChart";
 import { type DrillDownNode } from "../components/DrillDownTable";
 
-export function useTelemetryKpis() {
-  return useQuery<TelemetryKpis, Error>({
-    queryKey: ["telemetry", "kpis"],
-    queryFn: fetchTelemetryKpis,
-    staleTime: 60 * 1000, // 1 minute stale time
+export function useOrganizations() {
+  return useQuery<OrganizationItem[], Error>({
+    queryKey: ["telemetry", "organizations"],
+    queryFn: fetchOrganizations,
+    staleTime: 5 * 60 * 1000,
     retry: 2,
   });
 }
 
-export function useTelemetryChart(range: string = "30d") {
-  return useQuery<ChartDataPoint[], Error>({
-    queryKey: ["telemetry", "chart", range],
-    queryFn: () => fetchTelemetryChart(range),
+export function useTelemetryKpis(organizationId?: string) {
+  return useQuery<TelemetryKpis, Error>({
+    queryKey: ["telemetry", "kpis", organizationId || "all"],
+    queryFn: () => fetchTelemetryKpis(organizationId),
     staleTime: 60 * 1000,
     retry: 2,
   });
 }
 
-export function useTelemetryBreakdown() {
+export function useTelemetryChart(range: string = "30d", organizationId?: string) {
+  return useQuery<ChartDataPoint[], Error>({
+    queryKey: ["telemetry", "chart", range, organizationId || "all"],
+    queryFn: () => fetchTelemetryChart(range, organizationId),
+    staleTime: 60 * 1000,
+    retry: 2,
+  });
+}
+
+export function useTelemetryBreakdown(organizationId?: string) {
   return useQuery<DrillDownNode[], Error>({
-    queryKey: ["telemetry", "breakdown"],
-    queryFn: fetchTelemetryBreakdown,
+    queryKey: ["telemetry", "breakdown", organizationId || "all"],
+    queryFn: () => fetchTelemetryBreakdown(organizationId),
+    staleTime: 60 * 1000,
+    retry: 2,
+  });
+}
+
+export function useDepartmentExecutions(organizationId?: string) {
+  return useQuery<DepartmentExecution[], Error>({
+    queryKey: ["telemetry", "department-executions", organizationId || "all"],
+    queryFn: () => fetchDepartmentExecutions(organizationId),
     staleTime: 60 * 1000,
     retry: 2,
   });
