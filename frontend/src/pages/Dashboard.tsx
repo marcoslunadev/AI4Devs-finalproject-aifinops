@@ -13,6 +13,7 @@ import {
   useTelemetryKpis,
   useTelemetryChart,
   useTelemetryBreakdown,
+  useTelemetryStatus,
 } from "../hooks/useTelemetry";
 import {
   KpiSkeleton,
@@ -28,11 +29,13 @@ import {
   Building,
   AlertCircle,
   Sparkles,
+  RefreshCw,
+  Clock,
 } from "lucide-react";
 
 export const Dashboard: React.FC = () => {
   const { t } = useTranslation();
-  const [chartRange] = useState<string>("30d");
+  const [chartRange, setChartRange] = useState<string>("30d");
 
   // React Query Custom Hooks
   const {
@@ -56,6 +59,8 @@ export const Dashboard: React.FC = () => {
     refetch: refetchBreakdown,
   } = useTelemetryBreakdown();
 
+  const { data: telemetryStatus } = useTelemetryStatus();
+
   const handleRetryAll = () => {
     refetchKpis();
     refetchChart();
@@ -64,21 +69,54 @@ export const Dashboard: React.FC = () => {
 
   const hasGlobalError = kpisError && chartError && breakdownError;
 
+  const formatDate = (isoStr?: string | null) => {
+    if (!isoStr) return null;
+    try {
+      const d = new Date(isoStr);
+      return d.toLocaleString("es-ES", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch {
+      return null;
+    }
+  };
+
+  const formattedLastUpdated = formatDate(telemetryStatus?.lastIngestedAt);
+
   return (
     <div className="space-y-8 animate-fadeIn">
       {/* Executive Welcome Banner */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-900 via-indigo-800 to-purple-900 p-6 sm:p-8 text-white shadow-xl">
         <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative z-10 space-y-2 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold text-indigo-200 border border-white/10">
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            Executive Overview • Live API Telemetry
+        <div className="relative z-10 space-y-3 max-w-2xl">
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold text-indigo-200 border border-white/10">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              {t("header.badge", "Executive Overview • Live API Telemetry")}
+            </div>
+
+            {telemetryStatus?.status === "PROCESSING" ? (
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-200 border border-amber-400/30 backdrop-blur-md text-xs font-bold animate-pulse">
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-amber-300" />
+                {t("dashboard.ingesting", "Ingestando nuevos datos...")}
+              </div>
+            ) : formattedLastUpdated ? (
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 backdrop-blur-md text-xs font-medium">
+                <Clock className="w-3.5 h-3.5 text-emerald-300" />
+                {t("dashboard.lastUpdated", { time: formattedLastUpdated, defaultValue: `Última actualización: ${formattedLastUpdated}h` })}
+              </div>
+            ) : null}
           </div>
+
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
             {t("header.title")}
           </h1>
           <p className="text-sm text-indigo-200/90 leading-relaxed">
-            Monitoriza en tiempo real los costes de modelos LLM, consumo de tokens por organización y eficiencia operativa en toda tu infraestructura empresarial.
+            {t("dashboard.welcomeDescription")}
           </p>
         </div>
       </div>
@@ -86,8 +124,8 @@ export const Dashboard: React.FC = () => {
       {/* Global Error Banner if API fails completely */}
       {hasGlobalError && (
         <ErrorState
-          title="Fallo de conexión con la API Backend"
-          message="No se pudo conectar con el servidor de telemetría en http://localhost:3000/api/v1/telemetry. Asegúrate de que el backend Express está iniciado."
+          title={t("errors.backendConnectionTitle")}
+          message={t("errors.backendConnectionMessage")}
           onRetry={handleRetryAll}
         />
       )}
@@ -101,7 +139,7 @@ export const Dashboard: React.FC = () => {
           Array.from({ length: 6 }).map((_, i) => <KpiSkeleton key={i} />)
         ) : kpisError ? (
           <div className="col-span-full">
-            <ErrorState message="Error al cargar las tarjetas KPI." onRetry={refetchKpis} />
+            <ErrorState message={t("errors.kpisLoad")} onRetry={refetchKpis} />
           </div>
         ) : (
           <>
@@ -149,7 +187,7 @@ export const Dashboard: React.FC = () => {
             <KpiCard
               title={t("kpis.activeOrgs")}
               value={kpis?.activeOrgs !== undefined ? kpis.activeOrgs : "--"}
-              badgeText={kpis?.activeOrgsBadge ?? "Activas"}
+              badgeText={kpis?.activeOrgsBadge ?? t("kpis.active")}
               badgeVariant={kpis?.activeOrgs ? "success" : "neutral"}
               description={t("kpis.activeOrgsDesc")}
               icon={Building}
@@ -164,7 +202,7 @@ export const Dashboard: React.FC = () => {
               description={t("kpis.errorRateDesc")}
               icon={AlertCircle}
               gradient="from-rose-500 to-red-600"
-              badgeText={kpis?.errorRate !== undefined ? (kpis.errorRate < 1 ? "Óptimo" : "Alerta") : "--"}
+              badgeText={kpis?.errorRate !== undefined ? (kpis.errorRate < 1 ? t("kpis.optimal") : t("kpis.alert")) : "--"}
               badgeVariant={kpis?.errorRate !== undefined ? (kpis.errorRate < 1 ? "success" : "danger") : "neutral"}
             />
           </>
@@ -175,9 +213,13 @@ export const Dashboard: React.FC = () => {
       {chartLoading ? (
         <ChartSkeleton />
       ) : chartError ? (
-        <ErrorState message="Error al cargar la serie temporal." onRetry={refetchChart} />
+        <ErrorState message={t("errors.chartLoad")} onRetry={refetchChart} />
       ) : (
-        <CostChart data={chartData || []} />
+        <CostChart
+          data={chartData || []}
+          timeRange={chartRange}
+          onTimeRangeChange={(range) => setChartRange(range)}
+        />
       )}
 
       {/* Hierarchical DrillDown Table */}

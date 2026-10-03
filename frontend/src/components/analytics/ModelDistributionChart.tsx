@@ -91,13 +91,13 @@ export const ModelDistributionChart: React.FC<ModelDistributionChartProps> = ({
                         {item.provider}
                       </p>
                       <div className="flex justify-between gap-4 font-mono">
-                        <span className="text-slate-500">Gasto:</span>
+                        <span className="text-slate-500">{t("analytics.spend")}</span>
                         <span className="font-bold text-slate-900 dark:text-white">
                           ${item.cost.toFixed(2)}
                         </span>
                       </div>
                       <div className="flex justify-between gap-4 font-mono">
-                        <span className="text-slate-500">Cuota:</span>
+                        <span className="text-slate-500">{t("analytics.share")}</span>
                         <span className="font-bold text-emerald-600 dark:text-emerald-400">
                           {item.share}%
                         </span>

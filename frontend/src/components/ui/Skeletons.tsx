@@ -1,5 +1,6 @@
 import React from "react";
 import { AlertCircle, RefreshCw } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export const KpiSkeleton: React.FC = () => {
   return (
@@ -75,10 +76,14 @@ interface ErrorStateProps {
 }
 
 export const ErrorState: React.FC<ErrorStateProps> = ({
-  title = "Error de Conexión de Telemetría",
-  message = "No se pudieron obtener las métricas en tiempo real. Por favor verifica la conexión con el servidor backend.",
+  title,
+  message,
   onRetry,
 }) => {
+  const { t } = useTranslation();
+  const displayTitle = title || t("errors.defaultTitle");
+  const displayMessage = message || t("errors.defaultMessage");
+
   return (
     <div className="rounded-2xl bg-rose-50/50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 p-6 text-center space-y-4 shadow-xs">
       <div className="inline-flex p-3 rounded-full bg-rose-100 dark:bg-rose-900/60 text-rose-600 dark:text-rose-400">
@@ -86,10 +91,10 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
       </div>
       <div className="space-y-1">
         <h3 className="text-base font-bold text-rose-900 dark:text-rose-200">
-          {title}
+          {displayTitle}
         </h3>
         <p className="text-xs text-rose-700 dark:text-rose-300 max-w-md mx-auto">
-          {message}
+          {displayMessage}
         </p>
       </div>
       {onRetry && (
@@ -98,7 +103,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
           className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white shadow-xs transition"
         >
           <RefreshCw className="w-3.5 h-3.5" />
-          Reintentar Carga
+          {t("errors.retry")}
         </button>
       )}
     </div>

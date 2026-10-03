@@ -65,7 +65,7 @@ export const ModelEfficiencyChart: React.FC<ModelEfficiencyChartProps> = ({
             <XAxis
               type="number"
               dataKey="latencyMs"
-              name="Latencia"
+              name={t("analytics.latencyAxis")}
               unit="ms"
               tickLine={false}
               axisLine={false}
@@ -75,7 +75,7 @@ export const ModelEfficiencyChart: React.FC<ModelEfficiencyChartProps> = ({
             <YAxis
               type="number"
               dataKey="costPer1k"
-              name="Coste / 1k"
+              name={t("analytics.costAxis")}
               unit="$"
               tickLine={false}
               axisLine={false}
@@ -94,15 +94,15 @@ export const ModelEfficiencyChart: React.FC<ModelEfficiencyChartProps> = ({
                         {item.model}
                       </p>
                       <div className="flex justify-between gap-4 font-mono text-slate-600 dark:text-slate-400">
-                        <span>Latencia Promedio:</span>
+                        <span>{t("analytics.avgLatencyLabel")}</span>
                         <span className="font-bold text-indigo-600 dark:text-indigo-400">{item.latencyMs} ms</span>
                       </div>
                       <div className="flex justify-between gap-4 font-mono text-slate-600 dark:text-slate-400">
-                        <span>Coste por 1k tokens:</span>
+                        <span>{t("analytics.costPer1kLabel")}</span>
                         <span className="font-bold text-emerald-600 dark:text-emerald-400">${item.costPer1k}</span>
                       </div>
                       <div className="flex justify-between gap-4 font-mono text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-1">
-                        <span>Ejecuciones Totales:</span>
+                        <span>{t("analytics.totalExecutionsLabel")}</span>
                         <span className="font-bold">{item.executions.toLocaleString()}</span>
                       </div>
                     </div>
@@ -111,7 +111,7 @@ export const ModelEfficiencyChart: React.FC<ModelEfficiencyChartProps> = ({
                 return null;
               }}
             />
-            <Scatter name="Modelos" data={data}>
+            <Scatter name={t("analytics.modelsScatterName")} data={data}>
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { AlertTriangle, ShieldAlert, ArrowRight, ExternalLink, Loader2, CheckCircle2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAlertStore, type AnomalyAlert } from "../../store/alertStore";
 import { sendJiraTicketWebhook } from "../../services/webhookApi";
 
 export const BudgetWarningBanner: React.FC = () => {
+  const { t } = useTranslation();
   const { alerts, updateTicketStatus } = useAlertStore();
   const [loadingAlertId, setLoadingAlertId] = useState<string | null>(null);
 
@@ -76,14 +78,14 @@ export const BudgetWarningBanner: React.FC = () => {
                           : "bg-amber-500 text-slate-950"
                       }`}
                     >
-                      {isCritical ? "Crítico 100%+" : "Advertencia 85%+"}
+                      {isCritical ? t("alerts.criticalThreshold") : t("alerts.warningThreshold")}
                     </span>
                     <h4 className="text-sm font-bold tracking-tight">
-                      {alert.title}
+                      {alert.titleKey ? t(alert.titleKey, alert.title) : alert.title}
                     </h4>
                   </div>
                   <p className="text-xs text-slate-200/90 leading-relaxed">
-                    {alert.description}
+                    {alert.descriptionKey ? t(alert.descriptionKey, alert.description) : alert.description}
                   </p>
                 </div>
               </div>
@@ -114,11 +116,11 @@ export const BudgetWarningBanner: React.FC = () => {
                     {loadingAlertId === alert.id ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Creando Ticket...</span>
+                        <span>{t("alerts.creatingTicket")}</span>
                       </>
                     ) : (
                       <>
-                        <span>Crear Ticket en Jira</span>
+                        <span>{t("alerts.createJiraTicket")}</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </>
                     )}

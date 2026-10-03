@@ -22,18 +22,34 @@ export interface ChartDataPoint {
 
 interface CostChartProps {
   data: ChartDataPoint[];
+  timeRange?: string;
+  onTimeRangeChange?: (range: "7d" | "30d" | "90d") => void;
 }
 
-export const CostChart: React.FC<CostChartProps> = ({ data }) => {
+export const CostChart: React.FC<CostChartProps> = ({
+  data,
+  timeRange: externalTimeRange,
+  onTimeRangeChange,
+}) => {
   const { t } = useTranslation();
-  const [timeRange, setTimeRange] = useState<"7d" | "30d" | "90d">("30d");
+  const [internalTimeRange, setInternalTimeRange] = useState<"7d" | "30d" | "90d">("30d");
 
-  // Filter data based on selected range
+  const activeRange = (externalTimeRange as "7d" | "30d" | "90d") || internalTimeRange;
+
+  const handleRangeChange = (range: "7d" | "30d" | "90d") => {
+    setInternalTimeRange(range);
+    if (onTimeRangeChange) {
+      onTimeRangeChange(range);
+    }
+  };
+
+  // Filter data based on selected range (or use data as-is if driven by parent API request)
   const filteredData = React.useMemo(() => {
-    if (timeRange === "7d") return data.slice(-7);
-    if (timeRange === "30d") return data.slice(-30);
+    if (onTimeRangeChange) return data;
+    if (activeRange === "7d") return data.slice(-7);
+    if (activeRange === "30d") return data.slice(-30);
     return data;
-  }, [data, timeRange]);
+  }, [data, activeRange, onTimeRangeChange]);
 
   return (
     <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-6 shadow-xs space-y-6">
@@ -57,9 +73,9 @@ export const CostChart: React.FC<CostChartProps> = ({ data }) => {
         <div className="flex items-center bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl border border-slate-200 dark:border-slate-700/80 self-start sm:self-auto">
           <Calendar className="w-3.5 h-3.5 text-slate-400 ml-2 mr-1" />
           <button
-            onClick={() => setTimeRange("7d")}
+            onClick={() => handleRangeChange("7d")}
             className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all ${
-              timeRange === "7d"
+              activeRange === "7d"
                 ? "bg-white dark:bg-indigo-600 text-indigo-600 dark:text-white shadow-xs"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
@@ -67,9 +83,9 @@ export const CostChart: React.FC<CostChartProps> = ({ data }) => {
             7D
           </button>
           <button
-            onClick={() => setTimeRange("30d")}
+            onClick={() => handleRangeChange("30d")}
             className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all ${
-              timeRange === "30d"
+              activeRange === "30d"
                 ? "bg-white dark:bg-indigo-600 text-indigo-600 dark:text-white shadow-xs"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
@@ -77,9 +93,9 @@ export const CostChart: React.FC<CostChartProps> = ({ data }) => {
             30D
           </button>
           <button
-            onClick={() => setTimeRange("90d")}
+            onClick={() => handleRangeChange("90d")}
             className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all ${
-              timeRange === "90d"
+              activeRange === "90d"
                 ? "bg-white dark:bg-indigo-600 text-indigo-600 dark:text-white shadow-xs"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
@@ -93,8 +109,8 @@ export const CostChart: React.FC<CostChartProps> = ({ data }) => {
       {filteredData.length === 0 ? (
         <div className="h-72 w-full flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-950/40">
           <Calendar className="w-8 h-8 mb-2 opacity-40 text-indigo-500" />
-          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">No hay datos de telemetría registrados</p>
-          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">No se encontraron ejecuciones para el rango seleccionado.</p>
+          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">{t("charts.noDataTitle")}</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{t("charts.noDataSubtitle")}</p>
         </div>
       ) : (
         <div className="h-72 w-full pt-2">

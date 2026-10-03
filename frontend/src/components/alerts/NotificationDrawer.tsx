@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   X,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAlertStore, type AnomalyAlert } from "../../store/alertStore";
 import { sendJiraTicketWebhook } from "../../services/webhookApi";
 
@@ -22,6 +23,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
   isOpen,
   onClose,
 }) => {
+  const { t } = useTranslation();
   const {
     alerts,
     unreadCount,
@@ -64,7 +66,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
         <div className="flex items-center gap-2">
           <Bell className="w-4 h-4 text-indigo-500" />
           <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-            Alertas y Notificaciones
+            {t("notifications.title")}
           </h3>
           {unreadCount > 0 && (
             <span className="px-1.5 py-0.5 text-[10px] font-extrabold rounded-full bg-rose-500 text-white">
@@ -80,7 +82,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
               className="text-[11px] font-medium text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
             >
               <CheckCheck className="w-3 h-3" />
-              Leídas
+              {t("notifications.markAllRead")}
             </button>
           )}
           <button
@@ -96,7 +98,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
       <div className="max-h-96 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/60">
         {alerts.length === 0 ? (
           <div className="p-8 text-center text-xs text-slate-400">
-            No hay notificaciones activas.
+            {t("notifications.empty")}
           </div>
         ) : (
           alerts.map((alert) => (
@@ -117,16 +119,16 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                     <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
                   )}
                   <span className="text-xs font-bold text-slate-900 dark:text-white">
-                    {alert.title}
+                    {alert.titleKey ? t(alert.titleKey, alert.title) : alert.title}
                   </span>
                 </div>
                 <span className="text-[10px] text-slate-400 shrink-0">
-                  {alert.timestamp}
+                  {alert.timestampKey ? t(alert.timestampKey, alert.timestamp) : alert.timestamp}
                 </span>
               </div>
 
               <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                {alert.description}
+                {alert.descriptionKey ? t(alert.descriptionKey, alert.description) : alert.description}
               </p>
 
               {/* Actions Footer */}
@@ -155,11 +157,11 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                     {loadingAlertId === alert.id ? (
                       <>
                         <Loader2 className="w-3 h-3 animate-spin" />
-                        <span>Enviando...</span>
+                        <span>{t("notifications.sending")}</span>
                       </>
                     ) : (
                       <>
-                        <span>Ticket Jira</span>
+                        <span>{t("notifications.jiraTicket")}</span>
                       </>
                     )}
                   </button>
@@ -171,7 +173,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                     dismissAlert(alert.id);
                   }}
                   className="p-1 rounded-md text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/60 transition"
-                  title="Descartar"
+                  title={t("notifications.dismiss")}
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>

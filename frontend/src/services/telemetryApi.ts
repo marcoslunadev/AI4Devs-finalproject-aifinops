@@ -34,10 +34,25 @@ export async function fetchTelemetryChart(range: string = "30d"): Promise<ChartD
   return response.json();
 }
 
+export interface TelemetryStatus {
+  status: "PROCESSING" | "COMPLETED";
+  lastIngestedAt: string | null;
+  totalRecordsProcessed: number;
+  activeIngestionsCount: number;
+}
+
 export async function fetchTelemetryBreakdown(): Promise<DrillDownNode[]> {
   const response = await fetch(`${API_BASE_URL}/telemetry/breakdown`);
   if (!response.ok) {
     throw new Error(`Failed to fetch telemetry breakdown: ${response.statusText}`);
+  }
+  return response.json();
+}
+
+export async function fetchTelemetryStatus(): Promise<TelemetryStatus> {
+  const response = await fetch(`${API_BASE_URL}/telemetry/status`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch telemetry status: ${response.statusText}`);
   }
   return response.json();
 }

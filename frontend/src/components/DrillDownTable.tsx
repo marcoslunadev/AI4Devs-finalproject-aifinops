@@ -119,20 +119,20 @@ export const DrillDownTable: React.FC<DrillDownTableProps> = ({ data }) => {
     if (status === "active") {
       return (
         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-400 whitespace-nowrap">
-          <CheckCircle2 className="w-2.5 h-2.5" /> Active
+          <CheckCircle2 className="w-2.5 h-2.5" /> {t("kpis.active", "Active")}
         </span>
       );
     }
     if (status === "warning") {
       return (
         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 text-amber-700 dark:bg-amber-950/80 dark:text-amber-400 whitespace-nowrap">
-          <AlertTriangle className="w-2.5 h-2.5" /> Warning
+          <AlertTriangle className="w-2.5 h-2.5" /> {t("table.statusWarning", "Warning")}
         </span>
       );
     }
     return (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 whitespace-nowrap">
-        Inactive
+        {t("table.statusInactive", "Inactive")}
       </span>
     );
   };

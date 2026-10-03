@@ -35,11 +35,19 @@ La API SHALL protegerse activamente contra vectores de ataque comunes web.
 - **THEN** el sistema procesa la petición incluyendo los headers CORS correctos (`Access-Control-Allow-Origin`)
 
 ### Requirement: Respuestas de Telemetría Basadas en Consultas Agregadas
-El módulo de telemetría de la API v1 SHALL devolver métricas KPI, desgloses por jerarquía y gráficos temporales calculados directamente desde PostgreSQL a través de agregaciones dinámicas de Prisma ORM.
+El módulo de telemetría de la API v1 SHALL devolver métricas KPI, desgloses por jerarquía y gráficos temporales calculados directamente desde PostgreSQL a través de agregaciones dinámicas nativas (`aggregate`, `groupBy` o `$queryRaw`) sin descargar los registros crudos a memoria en Node.js.
 
 #### Scenario: Consulta de resumen KPI con base de datos poblada
 - **WHEN** un cliente realiza un `GET /api/v1/telemetry/kpis`
-- **THEN** el sistema realiza un `aggregate` de suma de costes e ID count sobre la tabla `ExecutionLog` y calcula el total de organizaciones dinámicamente desde PostgreSQL.
+- **THEN** el sistema ejecuta agregaciones nativas `SUM` y `COUNT` en la base de datos PostgreSQL
+- **AND** retorna la respuesta agregada en menos de 50ms sin iterar sobre arrays de registros en memoria Node.js
+
+### Requirement: Endpoint de Estado de Ingesta y Auditoría (`GET /api/v1/telemetry/status`)
+El backend API SHALL exponer el endpoint `GET /api/v1/telemetry/status` para informar al cliente del estado del motor de ingesta y el timestamp de la última actualización completada.
+
+#### Scenario: Petición de estado de ingesta
+- **WHEN** un cliente realiza una petición `GET /api/v1/telemetry/status`
+- **THEN** el sistema responde `200 OK` con un cuerpo JSON conteniendo `status` (`"PROCESSING"` | `"COMPLETED"`), `lastIngestedAt` (ISO string o null), `totalRecordsProcessed` y `activeIngestionsCount`
 
 ### Requirement: Endpoints de Telemetría para el Executive Dashboard
 El backend API SHALL exponer tres endpoints bajo `/api/v1/telemetry` que agreguen y retornen los datos de consumo de IA registrados en la base de datos PostgreSQL.
@@ -51,4 +59,14 @@ El backend API SHALL exponer tres endpoints bajo `/api/v1/telemetry` que agregue
 #### Scenario: Petición exitosa a los endpoints de telemetría
 - **WHEN** un cliente autenticado realiza una petición GET a `/api/v1/telemetry/kpis`
 - **THEN** el sistema responde `200 OK` con la estructura de métricas agregadas validada por Zod
+
+### Requirement: Serie Temporal Continua con Zero-Filling (`GET /api/v1/telemetry/chart`)
+El endpoint `GET /api/v1/telemetry/chart` SHALL generar un rango ininterrumpido de fechas continuas desde `(Hoy - N días)` hasta la fecha actual `Hoy`, rellenando con valores a cero (`cost: 0`, `tokens: 0`, `executions: 0`) todos los días en los que no existan ejecuciones registradas.
+
+#### Scenario: Petición de gráfico temporal con días sin actividad
+- **WHEN** un cliente consulta `GET /api/v1/telemetry/chart?range=7d`
+- **THEN** la API devuelve exactamente 7 elementos correspondientes a los últimos 7 días calendario concluyendo en el día de hoy
+- **AND** asigna `cost: 0`, `tokens: 0` y `executions: 0` a los días que no tienen registros en la base de datos
+
+
 

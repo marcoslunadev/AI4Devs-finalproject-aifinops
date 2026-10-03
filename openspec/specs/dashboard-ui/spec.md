@@ -51,3 +51,25 @@ El Dashboard UI SHALL incluir en el Header un icono de campana con contador de a
 - **WHEN** existen 2 anomalías no resueltas en el sistema
 - **THEN** el icono de campana en el Header muestra un badge numérico "2" con animación de atención y permite desplegar el menú de alertas al hacer clic
 
+### Requirement: Indicador de Estado de Ingesta y Timestamp de Última Actualización
+El Executive Dashboard UI SHALL mostrar en su cabecera un indicador visual animado cuando exista un proceso de ingesta de datos en curso y la fecha y hora de la última ingesta completada.
+
+#### Scenario: Visualización de ingesta en curso
+- **WHEN** la API devuelva que el estado de ingesta es `"PROCESSING"`
+- **THEN** la cabecera del Dashboard muestra una insignia animada indicando "Ingestando nuevos datos..."
+- **AND** activa un sondeado dinámico (polling) cada 5 segundos hasta que el estado cambie a `"COMPLETED"`
+
+#### Scenario: Visualización de última actualización completada
+- **WHEN** la API devuelva que el estado de ingesta es `"COMPLETED"` con una fecha `lastIngestedAt` válida
+- **THEN** la cabecera del Dashboard muestra la etiqueta de timestamp en formato legible (ej. "Última actualización: 03/10/2026 12:30h")
+
+### Requirement: Formateo Numérico Compacto y Estabilidad de Iconos en Tarjetas KPI
+Las tarjetas KPI del Executive Dashboard SHALL formatear cifras superiores a 1.000 usando sufijos de notación compacta (K, M, B) y MUST proteger la posición del icono dentro del contenedor flexbox impidiendo que se desplace o reduzca debido a la longitud del número.
+
+#### Scenario: Visualización de un coste o número de ejecuciones elevado
+- **WHEN** un valor numérico en una tarjeta KPI es grande (ej. 1,845,200 ejecuciones o $45,280.50)
+- **THEN** la tarjeta muestra el valor formateado de manera compacta (ej. `1.85M` o `$45.3K`)
+- **AND** el icono de la tarjeta mantiene su tamaño fijo de 40x40px (`shrink-0`) alineado en la esquina superior derecha sin desbordamiento.
+
+
+

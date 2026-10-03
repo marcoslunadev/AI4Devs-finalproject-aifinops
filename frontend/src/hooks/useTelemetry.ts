@@ -3,7 +3,9 @@ import {
   fetchTelemetryKpis,
   fetchTelemetryChart,
   fetchTelemetryBreakdown,
+  fetchTelemetryStatus,
   type TelemetryKpis,
+  type TelemetryStatus,
 } from "../services/telemetryApi";
 import { type ChartDataPoint } from "../components/CostChart";
 import { type DrillDownNode } from "../components/DrillDownTable";
@@ -31,6 +33,16 @@ export function useTelemetryBreakdown() {
     queryKey: ["telemetry", "breakdown"],
     queryFn: fetchTelemetryBreakdown,
     staleTime: 60 * 1000,
+    retry: 2,
+  });
+}
+
+export function useTelemetryStatus() {
+  return useQuery<TelemetryStatus, Error>({
+    queryKey: ["telemetry", "status"],
+    queryFn: fetchTelemetryStatus,
+    staleTime: 5 * 1000,
+    refetchInterval: (query) => (query.state.data?.status === "PROCESSING" ? 5000 : false),
     retry: 2,
   });
 }

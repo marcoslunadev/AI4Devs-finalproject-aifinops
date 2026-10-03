@@ -14,19 +14,22 @@ export class TelemetryService {
       const current30DaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
       const previous60DaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
 
-      const orgsCount = await this.prisma.organization.count();
-      const recentOrgsCount = await this.prisma.organization.count({
+      const [orgsCount, recentOrgsCount] = await Promise.all([
+        this.prisma.organization.count(),
+        this.prisma.organization.count({
+          where: { createdAt: { gte: current30DaysAgo } },
+        }),
+      ]);
+
+      // Current 30 days native SQL aggregation
+      const currentAgg = await this.prisma.executionLog.aggregate({
         where: { createdAt: { gte: current30DaysAgo } },
+        _sum: { cost: true },
+        _count: { id: true },
       });
 
-      // Current 30 days logs
-      const currentLogs = await this.prisma.executionLog.findMany({
-        where: { createdAt: { gte: current30DaysAgo } },
-        select: { cost: true, metadata: true },
-      });
-
-      // If no logs present in the DB
-      if (currentLogs.length === 0) {
+      const currentExecutions = currentAgg._count.id;
+      if (currentExecutions === 0) {
         return {
           totalCost: 0,
           totalCostChange: 0,
@@ -43,29 +46,35 @@ export class TelemetryService {
         };
       }
 
-      // Previous 30 days logs (30d - 60d ago)
-      const previousLogs = await this.prisma.executionLog.findMany({
+      // Previous 30 days native SQL aggregation
+      const previousAgg = await this.prisma.executionLog.aggregate({
         where: { createdAt: { gte: previous60DaysAgo, lt: current30DaysAgo } },
-        select: { cost: true, metadata: true },
+        _sum: { cost: true },
+        _count: { id: true },
       });
 
-      // Compute current period totals
-      const totalCostNum = currentLogs.reduce((acc, log) => acc + Number(log.cost), 0);
-      const totalExecutionsNum = currentLogs.length;
-      const totalTokensNum = currentLogs.reduce((acc, log) => {
-        const meta = log.metadata as { totalTokens?: number } | null;
-        return acc + (meta?.totalTokens || 0);
-      }, 0);
+      // Sum metadata totalTokens via SQL $queryRaw for current and previous periods
+      const [currentTokensRes, prevTokensRes] = await Promise.all([
+        this.prisma.$queryRaw<{ sum: bigint | number | null }[]>`
+          SELECT COALESCE(SUM((metadata->>'totalTokens')::bigint), 0) as sum
+          FROM "ExecutionLog"
+          WHERE "createdAt" >= ${current30DaysAgo}
+        `,
+        this.prisma.$queryRaw<{ sum: bigint | number | null }[]>`
+          SELECT COALESCE(SUM((metadata->>'totalTokens')::bigint), 0) as sum
+          FROM "ExecutionLog"
+          WHERE "createdAt" >= ${previous60DaysAgo} AND "createdAt" < ${current30DaysAgo}
+        `,
+      ]);
 
+      const totalCostNum = Number(currentAgg._sum.cost || 0);
+      const totalExecutionsNum = currentExecutions;
+      const totalTokensNum = Number(currentTokensRes[0]?.sum || 0);
       const avgCostPerExecNum = totalExecutionsNum > 0 ? totalCostNum / totalExecutionsNum : 0;
 
-      // Compute previous period totals for change rates
-      const prevCostNum = previousLogs.reduce((acc, log) => acc + Number(log.cost), 0);
-      const prevExecutionsNum = previousLogs.length;
-      const prevTokensNum = previousLogs.reduce((acc, log) => {
-        const meta = log.metadata as { totalTokens?: number } | null;
-        return acc + (meta?.totalTokens || 0);
-      }, 0);
+      const prevCostNum = Number(previousAgg._sum.cost || 0);
+      const prevExecutionsNum = previousAgg._count.id;
+      const prevTokensNum = Number(prevTokensRes[0]?.sum || 0);
       const prevAvgCost = prevExecutionsNum > 0 ? prevCostNum / prevExecutionsNum : 0;
 
       // Calculate percentage changes
@@ -106,10 +115,60 @@ export class TelemetryService {
     }
   }
 
+  public async getIngestionStatus(): Promise<{
+    status: "PROCESSING" | "COMPLETED";
+    lastIngestedAt: string | null;
+    totalRecordsProcessed: number;
+    activeIngestionsCount: number;
+  }> {
+    try {
+      const processingLogsCount = await this.prisma.ingestionAuditLog.count({
+        where: { status: "PROCESSING" },
+      });
+
+      const isProcessing = processingLogsCount > 0;
+
+      const latestCompletedLog = await this.prisma.ingestionAuditLog.findFirst({
+        where: { status: "COMPLETED" },
+        orderBy: { updatedAt: "desc" },
+      });
+
+      const totalAgg = await this.prisma.ingestionAuditLog.aggregate({
+        _sum: { successCount: true },
+      });
+
+      return {
+        status: isProcessing ? "PROCESSING" : "COMPLETED",
+        lastIngestedAt: latestCompletedLog ? latestCompletedLog.updatedAt.toISOString() : null,
+        totalRecordsProcessed: totalAgg._sum.successCount || 0,
+        activeIngestionsCount: processingLogsCount,
+      };
+    } catch {
+      return {
+        status: "COMPLETED",
+        lastIngestedAt: null,
+        totalRecordsProcessed: 0,
+        activeIngestionsCount: 0,
+      };
+    }
+  }
+
   public async getTimeSeriesChart(range: string = "30d"): Promise<ChartResponse> {
     try {
       const days = range === "7d" ? 7 : range === "90d" ? 90 : 30;
-      const startDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+      const dateMap = new Map<string, { cost: number; tokens: number; executions: number }>();
+
+      // Build continuous date skeleton for the last N days finishing at today (now)
+      const now = new Date();
+      for (let i = days - 1; i >= 0; i--) {
+        const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+        const dateStr = d.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
+        dateMap.set(dateStr, { cost: 0, tokens: 0, executions: 0 });
+      }
+
+      // Start date for DB query (start of first day in range)
+      const startDate = new Date(now.getTime() - (days - 1) * 24 * 60 * 60 * 1000);
+      startDate.setHours(0, 0, 0, 0);
 
       const logs = await this.prisma.executionLog.findMany({
         where: { createdAt: { gte: startDate } },
@@ -121,28 +180,22 @@ export class TelemetryService {
         orderBy: { createdAt: "asc" },
       });
 
-      if (logs.length === 0) {
-        return [];
-      }
-
-      // Group logs into date buckets
-      const groupedMap = new Map<string, { cost: number; tokens: number; executions: number }>();
-
+      // Accumulate logs into the continuous date skeleton
       for (const log of logs) {
         const dateStr = log.createdAt.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
-        const meta = log.metadata as { totalTokens?: number } | null;
-        const tokens = meta?.totalTokens || 0;
-        const costVal = Number(log.cost);
+        const existing = dateMap.get(dateStr);
+        if (existing) {
+          const meta = log.metadata as { totalTokens?: number } | null;
+          const tokens = meta?.totalTokens || 0;
+          const costVal = Number(log.cost);
 
-        const existing = groupedMap.get(dateStr) || { cost: 0, tokens: 0, executions: 0 };
-        groupedMap.set(dateStr, {
-          cost: Number((existing.cost + costVal).toFixed(2)),
-          tokens: existing.tokens + tokens,
-          executions: existing.executions + 1,
-        });
+          existing.cost = Number((existing.cost + costVal).toFixed(2));
+          existing.tokens += tokens;
+          existing.executions += 1;
+        }
       }
 
-      return Array.from(groupedMap.entries()).map(([date, stats]) => ({
+      return Array.from(dateMap.entries()).map(([date, stats]) => ({
         date,
         cost: stats.cost,
         tokens: stats.tokens,

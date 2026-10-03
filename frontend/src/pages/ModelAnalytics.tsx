@@ -16,13 +16,13 @@ export const ModelAnalytics: React.FC = () => {
         <div className="relative z-10 space-y-2 max-w-2xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold text-purple-200 border border-white/10">
             <Cpu className="w-3.5 h-3.5 text-purple-300" />
-            AI Intelligence & Model Intelligence
+            {t("analytics.badge", "AI Intelligence & Model Intelligence")}
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-            {t("analytics.title", "Analítica Detallada por Modelo y Proveedor")}
+            {t("analytics.title")}
           </h1>
           <p className="text-sm text-purple-200/90 leading-relaxed">
-            {t("analytics.subtitle", "Visualización avanzada de cuota de mercado, ratios de tokens e indicadores de latencia/coste por modelo LLM.")}
+            {t("analytics.subtitle")}
           </p>
         </div>
       </div>
@@ -35,13 +35,13 @@ export const ModelAnalytics: React.FC = () => {
           </div>
           <div>
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              {t("analytics.topModel", "Modelo Más Utilizado")}
+              {t("analytics.topModel")}
             </p>
             <p className="text-lg font-bold text-slate-900 dark:text-white">
               GPT-4o (OpenAI)
             </p>
             <span className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
-              54.1% del volumen total
+              {t("analytics.topModelVolume")}
             </span>
           </div>
         </div>
@@ -52,13 +52,13 @@ export const ModelAnalytics: React.FC = () => {
           </div>
           <div>
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              {t("analytics.mostEfficient", "Modelo Más Eficiente")}
+              {t("analytics.mostEfficient")}
             </p>
             <p className="text-lg font-bold text-slate-900 dark:text-white">
               GPT-4o Mini
             </p>
             <span className="text-[11px] font-medium text-cyan-600 dark:text-cyan-400">
-              $0.00015 / 1k tokens
+              {t("analytics.mostEfficientCost")}
             </span>
           </div>
         </div>
@@ -69,13 +69,13 @@ export const ModelAnalytics: React.FC = () => {
           </div>
           <div>
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              {t("analytics.avgLatency", "Latencia Promedio Global")}
+              {t("analytics.avgLatency")}
             </p>
             <p className="text-lg font-bold text-slate-900 dark:text-white">
               538 ms
             </p>
             <span className="text-[11px] font-medium text-purple-600 dark:text-purple-400">
-              Rango 280ms - 820ms
+              {t("analytics.latencyRange")}
             </span>
           </div>
         </div>

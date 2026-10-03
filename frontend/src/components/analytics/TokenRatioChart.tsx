@@ -90,15 +90,15 @@ export const TokenRatioChart: React.FC<TokenRatioChartProps> = ({
                         {label}
                       </p>
                       <div className="flex justify-between gap-4 font-mono text-indigo-600 dark:text-indigo-400">
-                        <span>Input Tokens:</span>
+                        <span>{t("analytics.inputTokens")}</span>
                         <span className="font-bold">{inputVal}k</span>
                       </div>
                       <div className="flex justify-between gap-4 font-mono text-purple-600 dark:text-purple-400">
-                        <span>Output Tokens:</span>
+                        <span>{t("analytics.outputTokens")}</span>
                         <span className="font-bold">{outputVal}k</span>
                       </div>
                       <div className="flex justify-between gap-4 font-mono text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-1">
-                        <span>Ratio Input/Output:</span>
+                        <span>{t("analytics.ratioInputOutput")}</span>
                         <span className="font-bold text-slate-900 dark:text-white">{ratioVal}x</span>
                       </div>
                     </div>
@@ -113,7 +113,7 @@ export const TokenRatioChart: React.FC<TokenRatioChartProps> = ({
               wrapperStyle={{ paddingBottom: "8px", fontSize: "12px" }}
               formatter={(value) => (
                 <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                  {value === "inputTokens" ? "Input Tokens (Prompt)" : "Output Tokens (Completion)"}
+                  {value === "inputTokens" ? t("analytics.legendInput") : t("analytics.legendOutput")}
                 </span>
               )}
             />

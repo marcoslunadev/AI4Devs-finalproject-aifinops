@@ -4,6 +4,9 @@ export interface AnomalyAlert {
   id: string;
   title: string;
   description: string;
+  titleKey?: string;
+  descriptionKey?: string;
+  timestampKey?: string;
   severity: "warning" | "critical";
   entityName: string;
   entityType: "organization" | "environment" | "user";
@@ -31,6 +34,9 @@ const INITIAL_ALERTS: AnomalyAlert[] = [
     id: "alert-1",
     title: "Presupuesto Crítico Excedido (100%)",
     description: "La organización 'Retail & E-Commerce AI' ha alcanzado el 103.8% de su presupuesto mensual asignado ($6.230 de $6.000).",
+    titleKey: "alerts.items.alert1Title",
+    descriptionKey: "alerts.items.alert1Desc",
+    timestampKey: "alerts.items.time15m",
     severity: "critical",
     entityName: "Retail & E-Commerce AI",
     entityType: "organization",
@@ -44,6 +50,9 @@ const INITIAL_ALERTS: AnomalyAlert[] = [
     id: "alert-2",
     title: "Advertencia de Umbral de Presupuesto (85%)",
     description: "El entorno 'DEV - R&D Sandbox' ha alcanzado el 92.5% de su límite de gasto presupuestado ($2.450 de $2.000).",
+    titleKey: "alerts.items.alert2Title",
+    descriptionKey: "alerts.items.alert2Desc",
+    timestampKey: "alerts.items.time42m",
     severity: "warning",
     entityName: "DEV - R&D Sandbox",
     entityType: "environment",
@@ -57,6 +66,9 @@ const INITIAL_ALERTS: AnomalyAlert[] = [
     id: "alert-3",
     title: "Pico Anómalo de Tokens en GPT-4o",
     description: "Se ha detectado un incremento del +240% de consumo de tokens por hora en 'Customer Support Assistant'.",
+    titleKey: "alerts.items.alert3Title",
+    descriptionKey: "alerts.items.alert3Desc",
+    timestampKey: "alerts.items.time2h",
     severity: "warning",
     entityName: "Customer Support Assistant (GPT-4o)",
     entityType: "user",
