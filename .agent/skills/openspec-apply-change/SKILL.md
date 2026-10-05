@@ -103,13 +103,13 @@ Implement tasks from an OpenSpec change.
    - Error or blocker encountered → report and wait for guidance
    - User interrupts
 
-7. **On completion or pause, show status**
+7. **Verify Coverage & Final Status**
 
-   Display:
-   - Tasks completed this session
-   - Overall progress: "N/M tasks complete"
-   - If all done: suggest archive
-   - If paused: explain why and wait for guidance
+   **Mandatory Test Coverage Verification (>80%)**:
+   - Before completing implementation or marking testing verification tasks as complete:
+     1. Run test coverage commands for both `backend/` and `frontend/`.
+     2. Ensure coverage reports confirm **>= 80%** test coverage for lines, functions, statements, and branches.
+     3. If coverage drops below 80%, write additional unit/integration tests to satisfy the >= 80% threshold before finalizing.
 
 **Output During Implementation**
 
@@ -133,6 +133,7 @@ Working on task 4/7: <task description>
 **Change:** <change-name>
 **Schema:** <schema-name>
 **Progress:** 7/7 tasks complete ✓
+**Test Coverage:** >= 80% verified for frontend and backend ✓
 
 ### Completed This Session
 - [x] Task 1
@@ -163,6 +164,7 @@ What would you like to do?
 ```
 
 **Guardrails**
+- **CRITICAL: Validate >= 80% Test Coverage**: Always run coverage reporting and verify >= 80% code coverage on frontend and backend before declaring implementation or verification tasks complete.
 - Keep going through tasks until done or blocked
 - Always read context files before starting (from the apply instructions output)
 - If task is ambiguous, pause and ask before implementing

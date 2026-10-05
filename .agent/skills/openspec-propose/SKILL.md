@@ -104,8 +104,20 @@ After completing all artifacts, summarize:
 - What's ready: "All artifacts needed for implementation are ready."
 - Prompt: "Run `/opsx-apply` or ask me to implement to start working on the tasks."
 
-**Artifact Creation Guidelines**
+**Artifact Creation Guidelines & Minimum Coverage (>80%) Rule**
 
+- **CRITICAL: Test Coverage Acceptance Criteria (>80%)**:
+  - Every `specs/<capability>/spec.md` produced MUST include an explicit requirement and scenario under `## ADDED Requirements` or `## MODIFIED Requirements` stating that test coverage for affected code (frontend and backend) MUST be maintained above **80%** (`>= 80%`).
+  - Example Requirement:
+    ```markdown
+    ### Requirement: Cobertura de Pruebas (>80%)
+    El código introducido o modificado en frontend y backend SHALL mantener una cobertura de pruebas unitarias/integración superior al 80% en líneas, funciones y declaraciones.
+
+    #### Scenario: Validación de umbrales de cobertura
+    - **WHEN** se ejecuta la suite de pruebas del proyecto (`npm test`)
+    - **THEN** la cobertura informada por el test runner es igual o superior al 80% sin fallos de umbral
+    ```
+  - `tasks.md` MUST include an explicit verification task for executing test coverage checks and ensuring >= 80% coverage.
 - Follow the `instruction` field from `openspec instructions` for each artifact type - it is the authoritative guidance, even for familiar artifact names
 - If the `instruction` field directs you to use a specific skill or command to create the artifact, invoke it instead of writing the artifact directly
 - The schema defines what each artifact should contain - follow it
@@ -116,6 +128,7 @@ After completing all artifacts, summarize:
   - These guide what you write, but should never appear in the output
 
 **Guardrails**
+- Ensure all created specs specify >= 80% test coverage as an explicit acceptance criterion for frontend and backend.
 - Create every artifact the apply phase transitively depends on, not just the ids listed in `apply.requires`
 - Always read dependency artifacts before creating a new one - re-read from disk, not from conversation memory (files may have changed since you last saw them)
 - If context is critically unclear, ask the user - but prefer making reasonable decisions to keep momentum

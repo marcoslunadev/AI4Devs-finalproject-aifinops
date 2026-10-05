@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "tsx src/modules/telemetry/test/telemetry.test.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "seed": "prisma db seed",
@@ -28,9 +29,11 @@
     "@types/express": "^5.0.6",
     "@types/multer": "^2.2.0",
     "@types/node": "^26.6.1",
+    "@vitest/coverage-v8": "^5.0.3",
     "prisma": "^6.0.0",
     "tsx": "^4.23.13",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
