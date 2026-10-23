@@ -10,6 +10,7 @@ import {
   type TelemetryStatus,
   type OrganizationItem,
   type DepartmentExecution,
+  type TelemetryFilterParams,
 } from "../services/telemetryApi";
 import { type ChartDataPoint } from "../components/CostChart";
 import { type DrillDownNode } from "../components/DrillDownTable";
@@ -23,28 +24,28 @@ export function useOrganizations() {
   });
 }
 
-export function useTelemetryKpis(organizationId?: string) {
+export function useTelemetryKpis(filters?: TelemetryFilterParams) {
   return useQuery<TelemetryKpis, Error>({
-    queryKey: ["telemetry", "kpis", organizationId || "all"],
-    queryFn: () => fetchTelemetryKpis(organizationId),
+    queryKey: ["telemetry", "kpis", filters?.organizationId || "all", filters?.environment || "ALL", filters?.provider || "all", filters?.models?.join(",") || "all"],
+    queryFn: () => fetchTelemetryKpis(filters),
     staleTime: 60 * 1000,
     retry: 2,
   });
 }
 
-export function useTelemetryChart(range: string = "30d", organizationId?: string) {
+export function useTelemetryChart(range: string = "30d", filters?: TelemetryFilterParams) {
   return useQuery<ChartDataPoint[], Error>({
-    queryKey: ["telemetry", "chart", range, organizationId || "all"],
-    queryFn: () => fetchTelemetryChart(range, organizationId),
+    queryKey: ["telemetry", "chart", range, filters?.organizationId || "all", filters?.environment || "ALL", filters?.provider || "all", filters?.models?.join(",") || "all"],
+    queryFn: () => fetchTelemetryChart(range, filters),
     staleTime: 60 * 1000,
     retry: 2,
   });
 }
 
-export function useTelemetryBreakdown(organizationId?: string) {
+export function useTelemetryBreakdown(filters?: TelemetryFilterParams) {
   return useQuery<DrillDownNode[], Error>({
-    queryKey: ["telemetry", "breakdown", organizationId || "all"],
-    queryFn: () => fetchTelemetryBreakdown(organizationId),
+    queryKey: ["telemetry", "breakdown", filters?.organizationId || "all", filters?.environment || "ALL", filters?.provider || "all", filters?.models?.join(",") || "all"],
+    queryFn: () => fetchTelemetryBreakdown(filters),
     staleTime: 60 * 1000,
     retry: 2,
   });

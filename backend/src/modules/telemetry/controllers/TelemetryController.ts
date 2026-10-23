@@ -28,7 +28,12 @@ export class TelemetryController {
   public getKpis = async (req: Request, res: Response): Promise<void> => {
     try {
       const organizationId = req.query.organizationId as string | undefined;
-      const data = await this.telemetryService.getKpiMetrics(organizationId);
+      const environment = req.query.environment as string | undefined;
+      const provider = req.query.provider as string | undefined;
+      const modelsStr = req.query.models as string | undefined;
+      const models = modelsStr ? modelsStr.split(",").map((s) => s.trim()).filter(Boolean) : undefined;
+
+      const data = await this.telemetryService.getKpiMetrics(organizationId, environment, provider, models);
       const validated = KpiResponseSchema.parse(data);
       res.status(200).json(validated);
     } catch (error: any) {
@@ -40,7 +45,12 @@ export class TelemetryController {
     try {
       const range = (req.query.range as string) || "30d";
       const organizationId = req.query.organizationId as string | undefined;
-      const data = await this.telemetryService.getTimeSeriesChart(range, organizationId);
+      const environment = req.query.environment as string | undefined;
+      const provider = req.query.provider as string | undefined;
+      const modelsStr = req.query.models as string | undefined;
+      const models = modelsStr ? modelsStr.split(",").map((s) => s.trim()).filter(Boolean) : undefined;
+
+      const data = await this.telemetryService.getTimeSeriesChart(range, organizationId, environment, provider, models);
       const validated = ChartResponseSchema.parse(data);
       res.status(200).json(validated);
     } catch (error: any) {
@@ -51,7 +61,12 @@ export class TelemetryController {
   public getBreakdown = async (req: Request, res: Response): Promise<void> => {
     try {
       const organizationId = req.query.organizationId as string | undefined;
-      const data = await this.telemetryService.getHierarchicalBreakdown(organizationId);
+      const environment = req.query.environment as string | undefined;
+      const provider = req.query.provider as string | undefined;
+      const modelsStr = req.query.models as string | undefined;
+      const models = modelsStr ? modelsStr.split(",").map((s) => s.trim()).filter(Boolean) : undefined;
+
+      const data = await this.telemetryService.getHierarchicalBreakdown(organizationId, environment, provider, models);
       const validated = BreakdownResponseSchema.parse(data);
       res.status(200).json(validated);
     } catch (error: any) {

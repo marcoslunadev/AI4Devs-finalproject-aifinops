@@ -28,9 +28,13 @@ export interface DrillDownNode {
 
 interface DrillDownTableProps {
   data: DrillDownNode[];
+  environmentFilter?: string;
 }
 
-export const DrillDownTable: React.FC<DrillDownTableProps> = ({ data }) => {
+export const DrillDownTable: React.FC<DrillDownTableProps> = ({
+  data,
+  environmentFilter,
+}) => {
   const { t } = useTranslation();
   const [expandedIds, setExpandedIds] = useState<Set<string>>(
     new Set(["org-1"]) // expand first org by default
@@ -83,14 +87,21 @@ export const DrillDownTable: React.FC<DrillDownTableProps> = ({ data }) => {
 
   // Filter tree recursively
   const filterTree = (nodes: DrillDownNode[]): DrillDownNode[] => {
-    if (!searchTerm.trim()) return nodes;
-    const term = searchTerm.toLowerCase();
+    const term = searchTerm.trim().toLowerCase();
+    const hasEnvFilter = environmentFilter && environmentFilter !== "ALL";
 
     return nodes.reduce<DrillDownNode[]>((acc, node) => {
-      const nameMatches = node.name.toLowerCase().includes(term);
+      // Check environment match if node is an environment level node
+      const envMatches =
+        !hasEnvFilter ||
+        (node.type === "environment"
+          ? node.name.toUpperCase().includes(environmentFilter.toUpperCase())
+          : true);
+
+      const nameMatches = !term || node.name.toLowerCase().includes(term);
       const filteredChildren = node.children ? filterTree(node.children) : [];
 
-      if (nameMatches || filteredChildren.length > 0) {
+      if (envMatches && (nameMatches || filteredChildren.length > 0)) {
         acc.push({
           ...node,
           children: filteredChildren.length > 0 ? filteredChildren : node.children,

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { KpiCard } from "../components/KpiCard";
 import { CostChart } from "../components/CostChart";
 import { DrillDownTable } from "../components/DrillDownTable";
 import { BudgetWarningBanner } from "../components/alerts/BudgetWarningBanner";
+import { GlobalFilterBar } from "../components/GlobalFilterBar";
 import {
   formatCompactCurrency,
   formatCompactNumber,
@@ -15,6 +16,7 @@ import {
   useTelemetryBreakdown,
   useTelemetryStatus,
 } from "../hooks/useTelemetry";
+import { type TelemetryFilterParams } from "../services/telemetryApi";
 import {
   KpiSkeleton,
   ChartSkeleton,
@@ -33,13 +35,28 @@ import {
   Clock,
 } from "lucide-react";
 
-import { useSearchParams } from "react-router-dom";
+import { useSyncFilterParams } from "../hooks/useSyncFilterParams";
 
 export const Dashboard: React.FC = () => {
   const { t } = useTranslation();
-  const [searchParams] = useSearchParams();
-  const organizationId = searchParams.get("organizationId") || undefined;
-  const [chartRange, setChartRange] = useState<string>("30d");
+  const filters = useSyncFilterParams();
+  const organizationId = filters.organizationId || undefined;
+  const chartRange = filters.range;
+
+  const filterParams: TelemetryFilterParams = useMemo(
+    () => ({
+      organizationId,
+      environment: filters.environment,
+      provider: filters.provider,
+      models: filters.selectedModels,
+    }),
+    [
+      organizationId,
+      filters.environment,
+      filters.provider,
+      filters.selectedModels,
+    ]
+  );
 
   // React Query Custom Hooks
   const {
@@ -47,21 +64,21 @@ export const Dashboard: React.FC = () => {
     isLoading: kpisLoading,
     isError: kpisError,
     refetch: refetchKpis,
-  } = useTelemetryKpis(organizationId);
+  } = useTelemetryKpis(filterParams);
 
   const {
     data: chartData,
     isLoading: chartLoading,
     isError: chartError,
     refetch: refetchChart,
-  } = useTelemetryChart(chartRange, organizationId);
+  } = useTelemetryChart(chartRange, filterParams);
 
   const {
     data: breakdownData,
     isLoading: breakdownLoading,
     isError: breakdownError,
     refetch: refetchBreakdown,
-  } = useTelemetryBreakdown(organizationId);
+  } = useTelemetryBreakdown(filterParams);
 
 
   const { data: telemetryStatus } = useTelemetryStatus();
@@ -134,6 +151,9 @@ export const Dashboard: React.FC = () => {
           onRetry={handleRetryAll}
         />
       )}
+
+      {/* Global Filter Bar (Dates, Organization, Environment, AI Models) */}
+      <GlobalFilterBar />
 
       {/* Budget Warning Banners (>85% / 100% threshold alerts) */}
       <BudgetWarningBanner />
@@ -222,8 +242,8 @@ export const Dashboard: React.FC = () => {
       ) : (
         <CostChart
           data={chartData || []}
-          timeRange={chartRange}
-          onTimeRangeChange={(range) => setChartRange(range)}
+          timeRange={filters.range}
+          onTimeRangeChange={(range) => filters.setRange(range as any)}
         />
       )}
 
@@ -233,7 +253,10 @@ export const Dashboard: React.FC = () => {
       ) : breakdownError ? (
         <ErrorState message="Error al cargar la tabla jerárquica." onRetry={refetchBreakdown} />
       ) : (
-        <DrillDownTable data={breakdownData || []} />
+        <DrillDownTable
+          data={breakdownData || []}
+          environmentFilter={filters.environment}
+        />
       )}
     </div>
   );

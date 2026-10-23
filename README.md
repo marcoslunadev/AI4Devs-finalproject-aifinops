@@ -49,12 +49,14 @@ Para iniciar los servidores en modo desarrollo, abre dos terminales distintas:
 
 **Terminal 1 (Backend - API REST):**
 ```bash
-npm run dev:backend
+cd backend
+npm run dev
 ```
 El servidor backend estará disponible en `http://localhost:3000`.
 
 **Terminal 2 (Frontend - React SPA):**
 ```bash
+cd frontend
 npm run dev:frontend
 ```
 La aplicación web estará disponible en `http://localhost:5173`.
