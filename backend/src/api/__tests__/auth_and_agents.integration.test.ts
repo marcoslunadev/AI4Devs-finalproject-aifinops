@@ -103,6 +103,18 @@ describe("API Integration Tests - Auth & Agent Endpoints", () => {
     expect(res.body).toHaveProperty("organization");
   });
 
+  it("GET /api/v1/agents - debe listar todos los agentes disponibles en el catálogo", async () => {
+    const res = await request(app)
+      .get("/api/v1/agents")
+      .set("Authorization", `Bearer ${authToken}`);
+
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBeGreaterThanOrEqual(1);
+    expect(res.body[0]).toHaveProperty("id");
+    expect(res.body[0]).toHaveProperty("name");
+  });
+
   it("GET /api/v1/agents/:agentId - debe retornar la ficha técnica y métricas agregadas del agente", async () => {
     const res = await request(app)
       .get("/api/v1/agents/agent_cm4918239")
@@ -117,6 +129,15 @@ describe("API Integration Tests - Auth & Agent Endpoints", () => {
     expect(res.body.metrics).toHaveProperty("totalCostUsd");
   });
 
+  it("GET /api/v1/agents/:agentId - debe retornar 404 si el agente no existe", async () => {
+    const res = await request(app)
+      .get("/api/v1/agents/agente_fantasma_inexistente")
+      .set("Authorization", `Bearer ${authToken}`);
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("error");
+  });
+
   it("GET /api/v1/agents/:agentId/executions - debe retornar las llamadas paginadas del agente", async () => {
     const res = await request(app)
       .get("/api/v1/agents/agent_cm4918239/executions?page=1&limit=5")
@@ -129,5 +150,20 @@ describe("API Integration Tests - Auth & Agent Endpoints", () => {
     expect(res.body).toHaveProperty("items");
     expect(Array.isArray(res.body.items)).toBe(true);
     expect(res.body.items.length).toBeLessThanOrEqual(5);
+  });
+
+  it("GET /api/v1/auth/me - debe rechazar token inválido o malformado con 401", async () => {
+    const res = await request(app)
+      .get("/api/v1/auth/me")
+      .set("Authorization", "Bearer token_falso_invalido");
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("error");
+  });
+
+  it("GET /api/v1/ruta_que_no_existe - debe retornar 404 vía notFoundHandler", async () => {
+    const res = await request(app).get("/api/v1/ruta_que_no_existe");
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("error");
   });
 });

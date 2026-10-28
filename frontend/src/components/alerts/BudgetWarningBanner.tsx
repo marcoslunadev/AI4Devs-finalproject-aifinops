@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import { AlertTriangle, ShieldAlert, ArrowRight, ExternalLink, Loader2, CheckCircle2 } from "lucide-react";
+import React from "react";
+import { AlertTriangle, ShieldAlert } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useAlertStore, type AnomalyAlert } from "../../store/alertStore";
-import { sendJiraTicketWebhook } from "../../services/webhookApi";
+import { useAlertStore } from "../../store/alertStore";
 
 export const BudgetWarningBanner: React.FC = () => {
   const { t } = useTranslation();
-  const { alerts, updateTicketStatus } = useAlertStore();
-  const [loadingAlertId, setLoadingAlertId] = useState<string | null>(null);
+  const { alerts } = useAlertStore();
 
   // Filter top critical & warning alerts
   const activeBudgetAlerts = alerts.filter(
@@ -15,28 +13,6 @@ export const BudgetWarningBanner: React.FC = () => {
   );
 
   if (activeBudgetAlerts.length === 0) return null;
-
-  const handleCreateTicket = async (alert: AnomalyAlert) => {
-    setLoadingAlertId(alert.id);
-    try {
-      const result = await sendJiraTicketWebhook({
-        alertId: alert.id,
-        entityName: alert.entityName,
-        entityType: alert.entityType,
-        severity: alert.severity,
-        currentCost: alert.currentCost,
-        budget: alert.budget,
-        percentageUsed: alert.percentageUsed,
-        description: alert.description,
-      });
-
-      if (result.success) {
-        updateTicketStatus(alert.id, result.ticketId, result.ticketUrl);
-      }
-    } finally {
-      setLoadingAlertId(null);
-    }
-  };
 
   return (
     <div className="space-y-3 animate-fadeIn">
@@ -90,42 +66,16 @@ export const BudgetWarningBanner: React.FC = () => {
                 </div>
               </div>
 
-              {/* Interactive Jira Webhook Trigger */}
-              <div className="shrink-0 w-full sm:w-auto flex justify-end">
-                {alert.ticketId ? (
-                  <a
-                    href={alert.ticketUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-semibold hover:bg-emerald-500/30 transition shadow-xs"
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    <span>{alert.ticketId}</span>
-                    <ExternalLink className="w-3.5 h-3.5 ml-0.5 opacity-70" />
-                  </a>
-                ) : (
-                  <button
-                    onClick={() => handleCreateTicket(alert)}
-                    disabled={loadingAlertId === alert.id}
-                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 disabled:opacity-50 ${
-                      isCritical
-                        ? "bg-rose-600 hover:bg-rose-500 text-white shadow-rose-900/30"
-                        : "bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-amber-900/30"
-                    }`}
-                  >
-                    {loadingAlertId === alert.id ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>{t("alerts.creatingTicket")}</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>{t("alerts.createJiraTicket")}</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </>
-                    )}
-                  </button>
-                )}
+              {/* Budget Metric Indicators */}
+              <div className="shrink-0 w-full sm:w-auto flex items-center justify-end">
+                <div className="text-left sm:text-right px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/10">
+                  <span className="text-xs font-mono font-bold tracking-tight">
+                    {alert.percentageUsed.toFixed(1)}% {t("alerts.budgetExceededSuffix", "consumido")}
+                  </span>
+                  <span className="block text-[11px] text-slate-300 font-mono">
+                    ${alert.currentCost.toLocaleString()} / ${alert.budget.toLocaleString()}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ChevronRight,
@@ -9,9 +10,9 @@ import {
   Search,
   Maximize2,
   Minimize2,
-  MoreVertical,
   AlertTriangle,
   CheckCircle2,
+  Bot,
 } from "lucide-react";
 
 export interface DrillDownNode {
@@ -254,12 +255,14 @@ export const DrillDownTable: React.FC<DrillDownTableProps> = ({
 
             {/* Actions */}
             <td className="py-2.5 px-3 text-right">
-              <button
-                className="p-1 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800"
-                title="Options"
+              <Link
+                to="/agents/agent_cm4918239"
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800/60 transition shadow-xs"
+                title="Ver detalle del agente"
               >
-                <MoreVertical className="w-3.5 h-3.5" />
-              </button>
+                <Bot className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Agente</span>
+              </Link>
             </td>
           </tr>
 

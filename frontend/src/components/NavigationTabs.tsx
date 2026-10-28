@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { LayoutDashboard, Cpu, Building2 } from "lucide-react";
+import { LayoutDashboard, Cpu, Building2, Bot } from "lucide-react";
 
 export const NavigationTabs: React.FC = () => {
   const { t } = useTranslation();
@@ -11,6 +11,7 @@ export const NavigationTabs: React.FC = () => {
   const isOverview = location.pathname === "/";
   const isModelAnalytics = location.pathname === "/analytics/models";
   const isDeptAnalytics = location.pathname === "/analytics/departments";
+  const isAgentDetail = location.pathname.startsWith("/agents");
 
   const handleTabChange = (path: string) => {
     // Preserve current URL query search parameters when switching tabs
@@ -57,6 +58,18 @@ export const NavigationTabs: React.FC = () => {
         >
           <Building2 className="w-4 h-4" />
           <span>{t("nav.departmentAnalytics", "Department Executions")}</span>
+        </button>
+
+        <button
+          onClick={() => handleTabChange("/agents/agent_cm4918239")}
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-xl transition-all duration-200 ${
+            isAgentDetail
+              ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20"
+              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/60"
+          }`}
+        >
+          <Bot className="w-4 h-4" />
+          <span>{t("nav.agentDetail", "Detalle de Agente")}</span>
         </button>
       </nav>
     </div>

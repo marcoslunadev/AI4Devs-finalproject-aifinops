@@ -9,6 +9,15 @@ export class AgentController {
     this.agentRepo = new AgentRepository();
   }
 
+  public listAgents = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const agents = await this.agentRepo.listAll();
+      res.status(200).json(agents);
+    } catch (error: any) {
+      res.status(500).json({ error: "Error listando agentes", details: error.message });
+    }
+  };
+
   public getAgentById = async (req: Request, res: Response): Promise<void> => {
     try {
       const { agentId } = req.params;

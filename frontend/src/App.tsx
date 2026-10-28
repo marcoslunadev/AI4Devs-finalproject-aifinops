@@ -5,6 +5,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { ModelAnalytics } from "./pages/ModelAnalytics";
 import { ExecutionLogsView } from "./components/ExecutionLogsView";
 import { LoginPage } from "./pages/LoginPage";
+import { AgentDetailView } from "./pages/AgentDetailView";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import "./App.css";
 
@@ -46,6 +47,20 @@ function App() {
               </DashboardLayout>
             </ProtectedRoute>
           }
+        />
+        <Route
+          path="/agents/:agentId"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <AgentDetailView />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/agents"
+          element={<Navigate to="/agents/agent_cm4918239" replace />}
         />
 
         {/* Fallback general redirige a / */}

@@ -1,18 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Bell,
   CheckCheck,
   Trash2,
-  ExternalLink,
   ShieldAlert,
   AlertTriangle,
-  Loader2,
-  CheckCircle2,
   X,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useAlertStore, type AnomalyAlert } from "../../store/alertStore";
-import { sendJiraTicketWebhook } from "../../services/webhookApi";
+import { useAlertStore } from "../../store/alertStore";
 
 interface NotificationDrawerProps {
   isOpen: boolean;
@@ -30,34 +26,9 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
     markAsRead,
     markAllAsRead,
     dismissAlert,
-    updateTicketStatus,
   } = useAlertStore();
 
-  const [loadingAlertId, setLoadingAlertId] = useState<string | null>(null);
-
   if (!isOpen) return null;
-
-  const handleCreateTicket = async (alert: AnomalyAlert) => {
-    setLoadingAlertId(alert.id);
-    try {
-      const result = await sendJiraTicketWebhook({
-        alertId: alert.id,
-        entityName: alert.entityName,
-        entityType: alert.entityType,
-        severity: alert.severity,
-        currentCost: alert.currentCost,
-        budget: alert.budget,
-        percentageUsed: alert.percentageUsed,
-        description: alert.description,
-      });
-
-      if (result.success) {
-        updateTicketStatus(alert.id, result.ticketId, result.ticketUrl);
-      }
-    } finally {
-      setLoadingAlertId(null);
-    }
-  };
 
   return (
     <div className="absolute right-0 top-12 w-80 sm:w-96 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xl z-50 overflow-hidden animate-fadeIn">
@@ -132,41 +103,10 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
               </p>
 
               {/* Actions Footer */}
-              <div className="pt-2 flex items-center justify-between gap-2 border-t border-slate-100/60 dark:border-slate-800/40">
-                {alert.ticketId ? (
-                  <a
-                    href={alert.ticketUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400 text-[11px] font-bold"
-                  >
-                    <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                    <span>{alert.ticketId}</span>
-                    <ExternalLink className="w-2.5 h-2.5 opacity-70" />
-                  </a>
-                ) : (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCreateTicket(alert);
-                    }}
-                    disabled={loadingAlertId === alert.id}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-semibold transition disabled:opacity-50"
-                  >
-                    {loadingAlertId === alert.id ? (
-                      <>
-                        <Loader2 className="w-3 h-3 animate-spin" />
-                        <span>{t("notifications.sending")}</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>{t("notifications.jiraTicket")}</span>
-                      </>
-                    )}
-                  </button>
-                )}
-
+              <div className="pt-2 flex items-center justify-between gap-2 border-t border-slate-100/60 dark:border-slate-800/40 text-[11px] text-slate-500 dark:text-slate-400">
+                <span className="font-medium truncate max-w-[220px]">
+                  {alert.entityName}
+                </span>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
