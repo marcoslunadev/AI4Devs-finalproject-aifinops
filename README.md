@@ -61,6 +61,33 @@ npm run dev:frontend
 ```
 La aplicación web estará disponible en `http://localhost:5173`.
 
+## 🎨 Sistema de Diseño y Look & Feel
+
+AIFinOps implementa un sistema de diseño visual unificado y tecnológico basado en **TailwindCSS v4**, optimizado para herramientas analíticas y de observabilidad de alta precisión:
+
+### Tokens y Paleta de Color
+* **Modo Oscuro (Dark Mode):**
+  * Fondo principal: `#080b11` (Obsidian Deep).
+  * Superficies modulares (tarjetas, tablas, modales): `#0f1420` con bordes sutiles `border-white/10`.
+  * Superficies elevadas (dropdowns, inputs, popovers): `#171e2e`.
+* **Modo Claro (Light Mode):**
+  * Fondo principal: `#f8fafc` (Slate 50).
+  * Superficies de tarjetas y tablas: `#ffffff` con bordes `border-slate-200`.
+* **Acentos de Interacción y Métricas:**
+  * **Cian (`#06b6d4` / `#0891b2`):** Elementos interactivos, foco, navegación activa y curvas temporales.
+  * **Esmeralda (`#10b981` / `#059669`):** Métricas monetarias en USD, cumplimiento presupuestario y estados exitosos.
+  * **Gradiente Insignia:** `linear-gradient(135deg, #06b6d4 0%, #10b981 100%)` para botones principales, badges y pestañas activas.
+
+### Jerarquía Tipográfica
+* **`Outfit` (`font-heading`):** Títulos, encabezados ejecutivos y nombres de sección.
+* **`Inter` (`font-sans`):** Textos descriptivos, controles, botones y contenido de tablas.
+* **`JetBrains Mono` (`font-mono`):** Importes financieros, recuentos de tokens, latencias y códigos de identificación.
+
+### Identidad Visual y Theming
+* **Emblema Tecnológico:** Logotipo CPU alojado en contenedor squircle con gradiente cian-esmeralda en la cabecera y la pantalla de acceso.
+* **Favicon Corporativo:** Silueta vectorial SVG adaptada a los tonos cian y esmeralda.
+* **Carga Anti-FOUC:** Script inline en `index.html` para transición instantánea de tema sin parpadeos al recargar.
+
 ## 📚 Documentación de Negocio y Producto
 
 Para entender el "Qué", "Por qué" y "Para quién" de este software, consulta el **Documento de Requisitos del Producto (PRD)**:
