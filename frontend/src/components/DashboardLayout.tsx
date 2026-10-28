@@ -1,7 +1,6 @@
 import React from "react";
 import { Header } from "./Header";
 import { NavigationTabs } from "./NavigationTabs";
-import { ThemeProvider } from "./ThemeProvider";
 import { useTranslation } from "react-i18next";
 import { ShieldCheck, Activity } from "lucide-react";
 
@@ -41,9 +40,5 @@ const LayoutContent: React.FC<DashboardLayoutProps> = ({ children }) => {
 };
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-  return (
-    <ThemeProvider>
-      <LayoutContent>{children}</LayoutContent>
-    </ThemeProvider>
-  );
+  return <LayoutContent>{children}</LayoutContent>;
 };

@@ -12,25 +12,27 @@ export class IngestionController {
   public uploadLogFile = async (req: Request, res: Response): Promise<void> => {
     try {
       if (!req.file) {
-        res.status(400).json({ error: 'No file uploaded' });
+        res.status(400).json({ error: 'No se ha adjuntado ningún archivo para procesar.' });
         return;
       }
 
       const fileId = randomUUID();
-      
-      const auditLog = await this.ingestionService.startIngestion(
+
+      const batch = await this.ingestionService.startIngestion(
         fileId,
         req.file.path,
-        req.file.originalname
+        req.file.originalname,
+        req.file.size
       );
 
       res.status(202).json({
-        message: 'File upload accepted and processing started in the background.',
-        auditLogId: auditLog.id,
-        fileId: fileId
+        message: 'Archivo recibido correctamente. Procesamiento de lote iniciado.',
+        batchId: batch.id,
+        fileName: batch.fileName,
+        status: batch.status,
       });
     } catch (error: any) {
-      res.status(500).json({ error: 'Internal server error', details: error.message });
+      res.status(500).json({ error: 'Error interno del servidor durante la ingesta', details: error.message });
     }
   };
 }

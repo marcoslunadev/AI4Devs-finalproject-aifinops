@@ -49,7 +49,26 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error("useTheme must be used within a ThemeProvider");
+    const saved = typeof window !== "undefined" ? (localStorage.getItem(THEME_STORAGE_KEY) as Theme) : "dark";
+    const currentTheme: Theme = saved === "light" || saved === "dark" ? saved : "dark";
+    return {
+      theme: currentTheme,
+      setTheme: (newTheme: Theme) => {
+        if (typeof document !== "undefined") {
+          if (newTheme === "dark") document.documentElement.classList.add("dark");
+          else document.documentElement.classList.remove("dark");
+          localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+        }
+      },
+      toggleTheme: () => {
+        if (typeof document !== "undefined") {
+          const next = document.documentElement.classList.contains("dark") ? "light" : "dark";
+          if (next === "dark") document.documentElement.classList.add("dark");
+          else document.documentElement.classList.remove("dark");
+          localStorage.setItem(THEME_STORAGE_KEY, next);
+        }
+      },
+    };
   }
   return context;
 };

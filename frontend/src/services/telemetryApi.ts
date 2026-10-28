@@ -1,5 +1,6 @@
 import { type ChartDataPoint } from "../components/CostChart";
 import { type DrillDownNode } from "../components/DrillDownTable";
+import api from "./api";
 
 export interface TelemetryKpis {
   totalCost: number;
@@ -42,16 +43,6 @@ export interface TelemetryStatus {
   activeIngestionsCount: number;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
-
-export async function fetchOrganizations(): Promise<OrganizationItem[]> {
-  const response = await fetch(`${API_BASE_URL}/telemetry/organizations`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch organizations: ${response.statusText}`);
-  }
-  return response.json();
-}
-
 export interface TelemetryFilterParams {
   organizationId?: string;
   environment?: string;
@@ -59,72 +50,62 @@ export interface TelemetryFilterParams {
   models?: string[];
 }
 
-function appendFilterParams(url: URL, filters?: TelemetryFilterParams) {
-  if (!filters) return;
+function buildFilterParams(filters?: TelemetryFilterParams): Record<string, string> {
+  const params: Record<string, string> = {};
+  if (!filters) return params;
+
   if (filters.organizationId) {
-    url.searchParams.append("organizationId", filters.organizationId);
+    params.organizationId = filters.organizationId;
   }
   if (filters.environment && filters.environment !== "ALL") {
-    url.searchParams.append("environment", filters.environment);
+    params.environment = filters.environment;
   }
   if (filters.provider && filters.provider !== "all") {
-    url.searchParams.append("provider", filters.provider);
+    params.provider = filters.provider;
   }
   if (filters.models && filters.models.length > 0) {
-    url.searchParams.append("models", filters.models.join(","));
+    params.models = filters.models.join(",");
   }
+  return params;
+}
+
+export async function fetchOrganizations(): Promise<OrganizationItem[]> {
+  const response = await api.get<OrganizationItem[]>("/telemetry/organizations");
+  return response.data;
 }
 
 export async function fetchTelemetryKpis(filters?: TelemetryFilterParams): Promise<TelemetryKpis> {
-  const url = new URL(`${API_BASE_URL}/telemetry/kpis`);
-  appendFilterParams(url, filters);
-  const response = await fetch(url.toString());
-  if (!response.ok) {
-    throw new Error(`Failed to fetch KPI metrics: ${response.statusText}`);
-  }
-  return response.json();
+  const params = buildFilterParams(filters);
+  const response = await api.get<TelemetryKpis>("/telemetry/kpis", { params });
+  return response.data;
 }
 
 export async function fetchTelemetryChart(
   range: string = "30d",
   filters?: TelemetryFilterParams
 ): Promise<ChartDataPoint[]> {
-  const url = new URL(`${API_BASE_URL}/telemetry/chart`);
-  url.searchParams.append("range", range);
-  appendFilterParams(url, filters);
-  const response = await fetch(url.toString());
-  if (!response.ok) {
-    throw new Error(`Failed to fetch time series chart: ${response.statusText}`);
-  }
-  return response.json();
+  const params = buildFilterParams(filters);
+  params.range = range;
+  const response = await api.get<ChartDataPoint[]>("/telemetry/chart", { params });
+  return response.data;
 }
 
 export async function fetchTelemetryBreakdown(filters?: TelemetryFilterParams): Promise<DrillDownNode[]> {
-  const url = new URL(`${API_BASE_URL}/telemetry/breakdown`);
-  appendFilterParams(url, filters);
-  const response = await fetch(url.toString());
-  if (!response.ok) {
-    throw new Error(`Failed to fetch telemetry breakdown: ${response.statusText}`);
-  }
-  return response.json();
+  const params = buildFilterParams(filters);
+  const response = await api.get<DrillDownNode[]>("/telemetry/breakdown", { params });
+  return response.data;
 }
 
 export async function fetchDepartmentExecutions(organizationId?: string): Promise<DepartmentExecution[]> {
-  const url = new URL(`${API_BASE_URL}/telemetry/department-executions`);
+  const params: Record<string, string> = {};
   if (organizationId) {
-    url.searchParams.append("organizationId", organizationId);
+    params.organizationId = organizationId;
   }
-  const response = await fetch(url.toString());
-  if (!response.ok) {
-    throw new Error(`Failed to fetch department executions: ${response.statusText}`);
-  }
-  return response.json();
+  const response = await api.get<DepartmentExecution[]>("/telemetry/department-executions", { params });
+  return response.data;
 }
 
 export async function fetchTelemetryStatus(): Promise<TelemetryStatus> {
-  const response = await fetch(`${API_BASE_URL}/telemetry/status`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch telemetry status: ${response.statusText}`);
-  }
-  return response.json();
+  const response = await api.get<TelemetryStatus>("/telemetry/status");
+  return response.data;
 }

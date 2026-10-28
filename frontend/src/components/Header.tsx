@@ -4,6 +4,8 @@ import { useTheme } from "./ThemeProvider";
 import { NotificationDrawer } from "./alerts/NotificationDrawer";
 import { OrganizationScopeSelector } from "./OrganizationScopeSelector";
 import { useAlertStore } from "../store/alertStore";
+import { useAuthStore } from "../store/authStore";
+import { useNavigate } from "react-router-dom";
 import {
   Sun,
   Moon,
@@ -12,13 +14,23 @@ import {
   Cpu,
   Sparkles,
   UserCheck,
+  LogOut,
+  ShieldCheck,
+  BarChart2,
 } from "lucide-react";
 
 export const Header: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const { unreadCount } = useAlertStore();
+  const { user, logout } = useAuthStore();
+  const navigate = useNavigate();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
 
   const currentLang = i18n.language || "es";
 
@@ -120,11 +132,53 @@ export const Header: React.FC = () => {
               />
             </div>
 
-            {/* Profile Avatar */}
-            <div className="flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-slate-800">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-xs ring-2 ring-indigo-500/20">
-                <UserCheck className="w-4 h-4" />
+            {/* User Profile, Role Badge & Logout */}
+            <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200 dark:border-slate-800">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-xs ring-2 ring-indigo-500/20">
+                  {user?.name ? user.name.slice(0, 2).toUpperCase() : <UserCheck className="w-4 h-4" />}
+                </div>
+
+                <div className="hidden lg:flex flex-col text-left">
+                  <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate max-w-[130px]">
+                    {user?.name || user?.email?.split("@")[0] || "Usuario"}
+                  </span>
+                  {user?.role === "ADMIN" ? (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-purple-600 dark:text-purple-400">
+                      <ShieldCheck className="w-3 h-3 text-purple-500" />
+                      ADMIN
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-cyan-600 dark:text-cyan-400">
+                      <BarChart2 className="w-3 h-3 text-cyan-500" />
+                      VIEWER
+                    </span>
+                  )}
+                </div>
               </div>
+
+              {/* Role badge for smaller screens */}
+              <div className="lg:hidden flex items-center">
+                {user?.role === "ADMIN" ? (
+                  <span className="px-2 py-0.5 text-[10px] font-bold bg-purple-100 text-purple-700 dark:bg-purple-950/80 dark:text-purple-300 rounded-full border border-purple-200 dark:border-purple-800/60">
+                    ADMIN
+                  </span>
+                ) : (
+                  <span className="px-2 py-0.5 text-[10px] font-bold bg-cyan-100 text-cyan-700 dark:bg-cyan-950/80 dark:text-cyan-300 rounded-full border border-cyan-200 dark:border-cyan-800/60">
+                    VIEWER
+                  </span>
+                )}
+              </div>
+
+              {/* Logout button */}
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg bg-slate-100 hover:bg-rose-50 dark:bg-slate-800 dark:hover:bg-rose-950/40 text-slate-600 hover:text-rose-600 dark:text-slate-300 dark:hover:text-rose-400 border border-slate-200/80 dark:border-slate-700/80 hover:border-rose-300 dark:hover:border-rose-800 transition shadow-xs"
+                title={t("auth.logout")}
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">{t("auth.logout")}</span>
+              </button>
             </div>
           </div>
 

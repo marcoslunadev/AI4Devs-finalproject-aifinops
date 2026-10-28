@@ -1,175 +1,291 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role, Environment, ExecutionStatus, BatchStatus, Prisma } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("🌱 Starting Database Seeding for AIFinOps Telemetry...");
+  console.log("🌱 Starting Database Seeding for AIFinOps...");
 
-  // Clean existing data in order of foreign key constraints
+  // 1. Limpieza en orden relacional
   await prisma.executionLog.deleteMany();
+  await prisma.ingestionBatch.deleteMany();
+  await prisma.aiAgent.deleteMany();
   await prisma.user.deleteMany();
   await prisma.department.deleteMany();
   await prisma.organization.deleteMany();
-  await prisma.ingestionAuditLog.deleteMany();
+  await prisma.modelPrice.deleteMany();
 
   console.log("🧹 Cleaned existing database records.");
 
-  // 1. Create Organizations
-  const orgVass = await prisma.organization.create({
-    data: {
-      name: "VASS Global Tech",
-    },
-  });
-
-  const orgBanking = await prisma.organization.create({
-    data: {
-      name: "Banking Solutions Division",
-    },
-  });
-
-  const orgRetail = await prisma.organization.create({
-    data: {
-      name: "Retail & E-Commerce AI",
-    },
-  });
-
-  console.log("🏢 Created Organizations.");
-
-  // 2. Create Departments / Environments
-  const deptVassProd = await prisma.department.create({
-    data: { name: "PROD - Production Env", organizationId: orgVass.id },
-  });
-
-  const deptVassPre = await prisma.department.create({
-    data: { name: "PRE - Staging & Testing", organizationId: orgVass.id },
-  });
-
-  const deptVassDev = await prisma.department.create({
-    data: { name: "DEV - R&D Sandbox", organizationId: orgVass.id },
-  });
-
-  const deptBankingProd = await prisma.department.create({
-    data: { name: "PROD - Core Banking AI", organizationId: orgBanking.id },
-  });
-
-  const deptBankingDev = await prisma.department.create({
-    data: { name: "DEV - Credit Risk Sandbox", organizationId: orgBanking.id },
-  });
-
-  const deptRetailProd = await prisma.department.create({
-    data: { name: "PROD - Recommendation Engine", organizationId: orgRetail.id },
-  });
-
-  console.log("🏬 Created Departments.");
-
-  // 3. Create Users / AI Agents
-  const usersData = [
+  // 2. Catálogo de Tarifas en ModelPrice (precios por cada 1K tokens)
+  const modelPricesData = [
     {
-      name: "Customer Support Assistant (GPT-4o)",
-      email: "agent-support@vass.com",
-      organizationId: orgVass.id,
-      departmentId: deptVassProd.id,
+      provider: "OPENAI",
+      model: "gpt-4o",
+      promptPricePer1k: new Prisma.Decimal("0.005000"),
+      completionPricePer1k: new Prisma.Decimal("0.015000"),
+      isActive: true,
     },
     {
-      name: "Code Copilot Enterprise (Claude 3.5)",
-      email: "copilot@vass.com",
-      organizationId: orgVass.id,
-      departmentId: deptVassProd.id,
+      provider: "OPENAI",
+      model: "gpt-4o-mini",
+      promptPricePer1k: new Prisma.Decimal("0.000150"),
+      completionPricePer1k: new Prisma.Decimal("0.000600"),
+      isActive: true,
     },
     {
-      name: "QA Automated Testing Pipeline",
-      email: "qa-pipeline@vass.com",
-      organizationId: orgVass.id,
-      departmentId: deptVassPre.id,
+      provider: "ANTHROPIC",
+      model: "claude-3-5-sonnet",
+      promptPricePer1k: new Prisma.Decimal("0.003000"),
+      completionPricePer1k: new Prisma.Decimal("0.015000"),
+      isActive: true,
     },
     {
-      name: "Innovation Lab Playground",
-      email: "lab-dev@vass.com",
-      organizationId: orgVass.id,
-      departmentId: deptVassDev.id,
+      provider: "GEMINI",
+      model: "gemini-1.5-pro",
+      promptPricePer1k: new Prisma.Decimal("0.001250"),
+      completionPricePer1k: new Prisma.Decimal("0.005000"),
+      isActive: true,
     },
     {
-      name: "Fraud Detection Neural Agent",
-      email: "fraud-ai@banking.com",
-      organizationId: orgBanking.id,
-      departmentId: deptBankingProd.id,
-    },
-    {
-      name: "Credit Risk Sandbox Model",
-      email: "risk-dev@banking.com",
-      organizationId: orgBanking.id,
-      departmentId: deptBankingDev.id,
-    },
-    {
-      name: "Product Recommender Engine",
-      email: "recommender@retail.com",
-      organizationId: orgRetail.id,
-      departmentId: deptRetailProd.id,
+      provider: "GEMINI",
+      model: "gemini-1.5-flash",
+      promptPricePer1k: new Prisma.Decimal("0.000075"),
+      completionPricePer1k: new Prisma.Decimal("0.000300"),
+      isActive: true,
     },
   ];
 
-  const createdUsers = [];
-  for (const u of usersData) {
-    const user = await prisma.user.create({ data: u });
-    createdUsers.push(user);
+  for (const mp of modelPricesData) {
+    await prisma.modelPrice.create({ data: mp });
   }
+  console.log("💵 Seeded ModelPrice catalog.");
 
-  console.log("👥 Created Users / Agents.");
+  // 3. Crear Organización y Departamentos
+  const acmeOrg = await prisma.organization.create({
+    data: { name: "Acme Corporation" },
+  });
 
-  // 4. Generate random ExecutionLogs for the last 90 days (~600 logs)
-  const aiModels = [
-    { name: "gpt-4o", inputRate: 0.005, outputRate: 0.015 },
-    { name: "gpt-4o-mini", inputRate: 0.00015, outputRate: 0.0006 },
-    { name: "claude-3-5-sonnet", inputRate: 0.003, outputRate: 0.015 },
-    { name: "gemini-1.5-pro", inputRate: 0.00125, outputRate: 0.005 },
+  const engDept = await prisma.department.create({
+    data: { name: "Core Engineering", organizationId: acmeOrg.id },
+  });
+
+  const opsDept = await prisma.department.create({
+    data: { name: "Customer Operations", organizationId: acmeOrg.id },
+  });
+
+  const aiDept = await prisma.department.create({
+    data: { name: "Data & AI Innovation", organizationId: acmeOrg.id },
+  });
+
+  console.log("🏢 Seeded Organizations and Departments.");
+
+  // 4. Crear Usuarios con hash bcrypt
+  const salt = await bcrypt.genSalt(10);
+  const masterAdminPassword = await bcrypt.hash("Admin_M4rc0s", salt);
+  const masterViewerPassword = await bcrypt.hash("Viewer_M4rc0s", salt);
+  const legacyAdminPassword = await bcrypt.hash("admin123", salt);
+  const legacyViewerPassword = await bcrypt.hash("viewer123", salt);
+
+  // Usuarios Maestros solicitados
+  const masterAdminUser = await prisma.user.create({
+    data: {
+      name: "admin",
+      email: "admin@aifinops.com",
+      passwordHash: masterAdminPassword,
+      role: Role.ADMIN,
+      organizationId: acmeOrg.id,
+      departmentId: engDept.id,
+    },
+  });
+
+  const masterViewerUser = await prisma.user.create({
+    data: {
+      name: "viewer",
+      email: "viewer@aifinops.com",
+      passwordHash: masterViewerPassword,
+      role: Role.FINOPS_VIEWER,
+      organizationId: acmeOrg.id,
+      departmentId: opsDept.id,
+    },
+  });
+
+  // Usuarios adicionales para pruebas y retrocompatibilidad
+  const adminUser = await prisma.user.create({
+    data: {
+      name: "Admin FinOps",
+      email: "admin@acme.com",
+      passwordHash: legacyAdminPassword,
+      role: Role.ADMIN,
+      organizationId: acmeOrg.id,
+      departmentId: engDept.id,
+    },
+  });
+
+  const finopsUser = await prisma.user.create({
+    data: {
+      name: "Auditor FinOps",
+      email: "finops@acme.com",
+      passwordHash: legacyViewerPassword,
+      role: Role.FINOPS_VIEWER,
+      organizationId: acmeOrg.id,
+      departmentId: opsDept.id,
+    },
+  });
+
+  const devUser = await prisma.user.create({
+    data: {
+      name: "Developer Acme",
+      email: "dev.user@acme.com",
+      passwordHash: legacyViewerPassword,
+      role: Role.FINOPS_VIEWER,
+      organizationId: acmeOrg.id,
+      departmentId: engDept.id,
+    },
+  });
+
+  const aiEngUser = await prisma.user.create({
+    data: {
+      name: "AI Engineer",
+      email: "ai.engineer@acme.com",
+      passwordHash: legacyViewerPassword,
+      role: Role.FINOPS_VIEWER,
+      organizationId: acmeOrg.id,
+      departmentId: aiDept.id,
+    },
+  });
+
+  console.log("👥 Seeded Master Users (admin/Admin_M4rc0s, viewer/Viewer_M4rc0s) and test users.");
+
+  // 5. Crear Agentes de IA
+  const copilotAgent = await prisma.aiAgent.create({
+    data: {
+      id: "agent_cm4918239",
+      name: "Code Copilot Pro",
+      description: "Asistente inteligente de desarrollo de software",
+      organizationId: acmeOrg.id,
+      departmentId: engDept.id,
+      status: "ACTIVE",
+    },
+  });
+
+  const supportAgent = await prisma.aiAgent.create({
+    data: {
+      id: "agent_support_01",
+      name: "Customer Care Bot",
+      description: "Agente conversacional de atención a clientes 24/7",
+      organizationId: acmeOrg.id,
+      departmentId: opsDept.id,
+      status: "ACTIVE",
+    },
+  });
+
+  const fraudAgent = await prisma.aiAgent.create({
+    data: {
+      id: "agent_fraud_02",
+      name: "Risk & Fraud Analyzer",
+      description: "Agente de detección de anomalías y transacciones sospechosas",
+      organizationId: acmeOrg.id,
+      departmentId: aiDept.id,
+      status: "ACTIVE",
+    },
+  });
+
+  console.log("🤖 Seeded AI Agents.");
+
+  // 6. Crear IngestionBatch inicial
+  const seedBatch = await prisma.ingestionBatch.create({
+    data: {
+      fileName: "telemetry_seed_history_90d.jsonl",
+      fileSizeBytes: 145020,
+      totalRecords: 700,
+      processedRecords: 695,
+      failedRecords: 5,
+      errorSummary: "5 registros descartados por formato inválido o timeout de proveedor.",
+      status: BatchStatus.COMPLETED,
+    },
+  });
+
+  // 7. Generar registros de ejecución realistas de los últimos 90 días
+  const users = [masterAdminUser, masterViewerUser, adminUser, finopsUser, devUser, aiEngUser];
+  const agents = [copilotAgent, supportAgent, fraudAgent];
+  const environments: Environment[] = [Environment.DEV, Environment.PRE, Environment.PRO];
+  const statuses: ExecutionStatus[] = [
+    ExecutionStatus.SUCCESS,
+    ExecutionStatus.SUCCESS,
+    ExecutionStatus.SUCCESS,
+    ExecutionStatus.SUCCESS,
+    ExecutionStatus.ERROR,
+    ExecutionStatus.TIMEOUT,
   ];
 
-  const logsToInsert = [];
   const now = Date.now();
   const ninetyDaysMs = 90 * 24 * 60 * 60 * 1000;
 
-  for (let i = 0; i < 650; i++) {
-    const randomUser = createdUsers[Math.floor(Math.random() * createdUsers.length)];
-    const model = aiModels[Math.floor(Math.random() * aiModels.length)];
+  const logsData = [];
 
-    // Random timestamp within last 90 days
-    const randomTime = new Date(now - Math.random() * ninetyDaysMs);
+  for (let i = 0; i < 700; i++) {
+    const user = users[Math.floor(Math.random() * users.length)];
+    const agent = agents[Math.floor(Math.random() * agents.length)];
+    const priceConfig = modelPricesData[Math.floor(Math.random() * modelPricesData.length)];
+    const env = environments[Math.floor(Math.random() * environments.length)];
+    const status = statuses[Math.floor(Math.random() * statuses.length)];
 
-    const promptTokens = Math.floor(200 + Math.random() * 4000);
-    const completionTokens = Math.floor(50 + Math.random() * 2000);
+    const promptTokens = Math.floor(150 + Math.random() * 3500);
+    const completionTokens = Math.floor(50 + Math.random() * 1500);
     const totalTokens = promptTokens + completionTokens;
 
-    const inputCost = (promptTokens / 1000) * model.inputRate;
-    const outputCost = (completionTokens / 1000) * model.outputRate;
-    const totalCost = inputCost + outputCost;
+    // Cálculo financiero determinista:
+    // cost = (promptTokens * promptPrice / 1000) + (completionTokens * completionPrice / 1000)
+    const promptPriceNum = Number(priceConfig.promptPricePer1k.toString());
+    const completionPriceNum = Number(priceConfig.completionPricePer1k.toString());
 
-    logsToInsert.push({
-      userId: randomUser.id,
-      aiModel: model.name,
-      cost: totalCost,
-      inputCost: inputCost,
-      outputCost: outputCost,
-      createdAt: randomTime,
+    const inputCostNum = (promptTokens * promptPriceNum) / 1000;
+    const outputCostNum = (completionTokens * completionPriceNum) / 1000;
+    const totalCostNum = inputCostNum + outputCostNum;
+
+    const inputCost = new Prisma.Decimal(inputCostNum.toFixed(6));
+    const outputCost = new Prisma.Decimal(outputCostNum.toFixed(6));
+    const costUsd = new Prisma.Decimal(totalCostNum.toFixed(6));
+
+    const latencyMs = Math.floor(100 + Math.random() * 1800);
+    const executedAt = new Date(now - Math.random() * ninetyDaysMs);
+
+    logsData.push({
+      userId: user.id,
+      agentId: agent.id,
+      batchId: seedBatch.id,
+      environment: env,
+      provider: priceConfig.provider,
+      model: priceConfig.model,
+      promptTokens,
+      completionTokens,
+      totalTokens,
+      latencyMs,
+      costUsd,
+      inputCost,
+      outputCost,
+      status,
+      executedAt,
       metadata: {
-        promptTokens,
-        completionTokens,
-        totalTokens,
-        latencyMs: Math.floor(120 + Math.random() * 1500),
+        sessionId: `sess_${Math.random().toString(36).substring(7)}`,
+        temperature: 0.7,
       },
     });
   }
 
+  // Insertar en bloques para mejor rendimiento
   await prisma.executionLog.createMany({
-    data: logsToInsert,
+    data: logsData,
   });
 
-  console.log(`🚀 Successfully inserted ${logsToInsert.length} ExecutionLog entries.`);
-  console.log("✅ Database Seeding Completed!");
+  console.log(`📊 Seeded ${logsData.length} ExecutionLogs spanning 90 days across DEV, PRE, and PRO.`);
+  console.log("✅ Database seeding completed successfully!");
 }
 
 main()
   .catch((e) => {
-    console.error("❌ Seeding failed:", e);
+    console.error("❌ Error seeding database:", e);
     process.exit(1);
   })
   .finally(async () => {

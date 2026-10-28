@@ -1,6 +1,7 @@
 ## Purpose
 Permite al sistema procesar archivos de telemetría de IA de forma asíncrona, tolerando grandes volúmenes de datos mediante streaming y un mapeo de datos paramétrico basado en el origen.
 
+## Requirements
 
 ### Requirement: Ingesta asíncrona tolerante a fallos
 El sistema SHALL recibir archivos de logs (JSON/CSV) y procesarlos en segundo plano sin bloquear la solicitud HTTP inicial. El progreso y resultado de esta operación SHALL registrarse para auditoría.
