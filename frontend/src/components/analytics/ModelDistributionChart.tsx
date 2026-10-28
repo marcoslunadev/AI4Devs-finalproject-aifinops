@@ -39,13 +39,13 @@ export const ModelDistributionChart: React.FC<ModelDistributionChartProps> = ({
   );
 
   return (
-    <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-6 shadow-xs space-y-4 flex flex-col justify-between">
+    <div className="rounded-2xl bg-white dark:bg-[#0f1420] border border-slate-200/80 dark:border-white/10 p-6 shadow-xs space-y-4 flex flex-col justify-between">
       <div>
         <div className="flex items-center gap-2">
-          <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
+          <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
             <PieChartIcon className="w-4 h-4" />
           </div>
-          <h3 className="text-base font-bold text-slate-900 dark:text-white">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white font-heading">
             {t("analytics.distributionTitle", "Distribución por Proveedor")}
           </h3>
         </div>
@@ -57,7 +57,7 @@ export const ModelDistributionChart: React.FC<ModelDistributionChartProps> = ({
       <div className="h-64 w-full relative">
         {/* Center label inside Donut */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-6">
-          <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+          <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider font-heading">
             Total
           </span>
           <span className="text-xl font-extrabold text-slate-900 dark:text-white font-mono">
@@ -86,7 +86,7 @@ export const ModelDistributionChart: React.FC<ModelDistributionChartProps> = ({
                 if (active && payload && payload.length) {
                   const item = payload[0].payload as ProviderDistributionItem;
                   return (
-                    <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 p-3 rounded-xl shadow-xl text-xs space-y-1">
+                    <div className="bg-white/95 dark:bg-[#0f1420]/95 backdrop-blur-md border border-slate-200 dark:border-white/10 p-3 rounded-xl shadow-xl text-xs space-y-1">
                       <p className="font-bold text-slate-800 dark:text-slate-200">
                         {item.provider}
                       </p>

@@ -118,9 +118,9 @@ export const DrillDownTable: React.FC<DrillDownTableProps> = ({
   const renderIcon = (type: DrillDownNode["type"]) => {
     switch (type) {
       case "organization":
-        return <Building2 className="w-3.5 h-3.5 text-indigo-500 shrink-0" />;
+        return <Building2 className="w-3.5 h-3.5 text-cyan-500 shrink-0" />;
       case "environment":
-        return <Server className="w-3.5 h-3.5 text-purple-500 shrink-0" />;
+        return <Server className="w-3.5 h-3.5 text-emerald-500 shrink-0" />;
       case "user":
         return <User className="w-3.5 h-3.5 text-slate-400 shrink-0" />;
     }
@@ -130,20 +130,20 @@ export const DrillDownTable: React.FC<DrillDownTableProps> = ({
   const renderStatus = (status: DrillDownNode["status"]) => {
     if (status === "active") {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-400 whitespace-nowrap">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 whitespace-nowrap">
           <CheckCircle2 className="w-2.5 h-2.5" /> {t("kpis.active", "Active")}
         </span>
       );
     }
     if (status === "warning") {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 text-amber-700 dark:bg-amber-950/80 dark:text-amber-400 whitespace-nowrap">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 whitespace-nowrap">
           <AlertTriangle className="w-2.5 h-2.5" /> {t("table.statusWarning", "Warning")}
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 whitespace-nowrap">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-500/20 whitespace-nowrap">
         {t("table.statusInactive", "Inactive")}
       </span>
     );
@@ -154,17 +154,17 @@ export const DrillDownTable: React.FC<DrillDownTableProps> = ({
     if (!budget || budget === 0) return <span className="text-slate-400">—</span>;
     const pct = Math.min(Math.round((cost / budget) * 100), 100);
 
-    let colorClass = "bg-emerald-500";
-    if (pct >= 90) colorClass = "bg-rose-500";
-    else if (pct >= 75) colorClass = "bg-amber-500";
+    let colorClass = "bg-gradient-to-r from-teal-500 to-emerald-500";
+    if (pct >= 90) colorClass = "bg-gradient-to-r from-rose-500 to-red-600";
+    else if (pct >= 75) colorClass = "bg-gradient-to-r from-amber-400 to-orange-500";
 
     return (
       <div className="w-24 sm:w-28 space-y-1">
         <div className="flex justify-between text-[10px] font-semibold">
-          <span className="text-slate-700 dark:text-slate-300">{pct}%</span>
+          <span className="text-slate-700 dark:text-slate-300 font-mono">{pct}%</span>
           <span className="text-slate-400 font-mono">{formatCurrency(budget)}</span>
         </div>
-        <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+        <div className="w-full h-1.5 bg-slate-100 dark:bg-[#171e2e] rounded-full overflow-hidden">
           <div
             className={`h-full ${colorClass} rounded-full transition-all duration-500`}
             style={{ width: `${pct}%` }}
@@ -185,11 +185,11 @@ export const DrillDownTable: React.FC<DrillDownTableProps> = ({
           <tr
             className={`group transition-colors ${
               level === 0
-                ? "bg-slate-50/50 dark:bg-slate-900/50 hover:bg-indigo-50/40 dark:hover:bg-indigo-950/30 font-semibold"
+                ? "bg-slate-50/50 dark:bg-[#171e2e]/40 hover:bg-cyan-500/5 dark:hover:bg-cyan-500/10 font-heading font-semibold"
                 : level === 1
-                ? "bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60"
-                : "bg-slate-50/30 dark:bg-slate-950/40 hover:bg-slate-100/50 dark:hover:bg-slate-900/80 text-xs"
-            } border-b border-slate-200/60 dark:border-slate-800/60`}
+                ? "bg-white dark:bg-[#0f1420] hover:bg-slate-50 dark:hover:bg-[#171e2e]/60"
+                : "bg-slate-50/30 dark:bg-[#080b11]/40 hover:bg-cyan-500/5 dark:hover:bg-cyan-500/10 text-xs"
+            } border-b border-slate-200/60 dark:border-white/10`}
           >
             {/* Entity / Name with indent */}
             <td className="py-2.5 px-3 text-slate-900 dark:text-slate-100 max-w-[200px] sm:max-w-[280px]">
@@ -200,13 +200,13 @@ export const DrillDownTable: React.FC<DrillDownTableProps> = ({
                 {hasChildren ? (
                   <button
                     onClick={() => toggleExpand(node.id)}
-                    className="p-0.5 rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition shrink-0"
+                    className="p-0.5 rounded-md hover:bg-slate-200 dark:hover:bg-[#171e2e] text-slate-500 dark:text-slate-400 transition shrink-0"
                     aria-label="Toggle Expand"
                   >
                     {isExpanded ? (
-                      <ChevronDown className="w-3.5 h-3.5" />
+                      <ChevronDown className="w-3.5 h-3.5 text-cyan-500" />
                     ) : (
-                      <ChevronRight className="w-3.5 h-3.5" />
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
                     )}
                   </button>
                 ) : (
@@ -215,12 +215,12 @@ export const DrillDownTable: React.FC<DrillDownTableProps> = ({
                 {renderIcon(node.type)}
                 <span className="truncate text-xs">{node.name}</span>
                 {node.type === "organization" && (
-                  <span className="px-1 py-0.2 text-[9px] font-bold uppercase bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 rounded border border-indigo-200 dark:border-indigo-800/60 shrink-0">
+                  <span className="tag-pill text-[9px] py-0.2 px-1.5 shrink-0">
                     Org
                   </span>
                 )}
                 {node.type === "environment" && (
-                  <span className="px-1 py-0.2 text-[9px] font-bold uppercase bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 rounded border border-purple-200 dark:border-purple-800/60 shrink-0 hidden sm:inline">
+                  <span className="tag-pill-emerald text-[9px] py-0.2 px-1.5 shrink-0 hidden sm:inline">
                     {node.name.split(" ")[0]}
                   </span>
                 )}
@@ -257,7 +257,7 @@ export const DrillDownTable: React.FC<DrillDownTableProps> = ({
             <td className="py-2.5 px-3 text-right">
               <Link
                 to="/agents/agent_cm4918239"
-                className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800/60 transition shadow-xs"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] font-semibold text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-950/40 hover:bg-cyan-100 dark:hover:bg-cyan-900/60 border border-cyan-200/80 dark:border-cyan-800/60 transition shadow-xs"
                 title="Ver detalle del agente"
               >
                 <Bot className="w-3.5 h-3.5" />
@@ -274,11 +274,11 @@ export const DrillDownTable: React.FC<DrillDownTableProps> = ({
   };
 
   return (
-    <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-4 sm:p-6 shadow-xs space-y-4">
+    <div className="rounded-2xl bg-white dark:bg-[#0f1420] border border-slate-200/80 dark:border-white/10 p-4 sm:p-6 shadow-xs space-y-4">
       {/* Header & Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white font-heading">
             {t("table.title")}
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -295,24 +295,24 @@ export const DrillDownTable: React.FC<DrillDownTableProps> = ({
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={t("table.searchPlaceholder")}
-              className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+              className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-100 dark:bg-[#171e2e] border border-slate-200 dark:border-white/10 rounded-xl text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
             />
           </div>
 
           {/* Expand / Collapse All Controls */}
-          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700/80">
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-[#171e2e] p-1 rounded-xl border border-slate-200 dark:border-white/10">
             <button
               onClick={expandAll}
-              className="flex items-center gap-1 px-2 py-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 rounded-lg transition"
+              className="flex items-center gap-1 px-2 py-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-[#1f293d] rounded-lg transition cursor-pointer font-heading"
             >
-              <Maximize2 className="w-3 h-3 text-indigo-500" />
+              <Maximize2 className="w-3 h-3 text-cyan-500" />
               {t("table.expandAll")}
             </button>
             <button
               onClick={collapseAll}
-              className="flex items-center gap-1 px-2 py-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 rounded-lg transition"
+              className="flex items-center gap-1 px-2 py-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-[#1f293d] rounded-lg transition cursor-pointer font-heading"
             >
-              <Minimize2 className="w-3 h-3 text-indigo-500" />
+              <Minimize2 className="w-3 h-3 text-cyan-500" />
               {t("table.collapseAll")}
             </button>
           </div>
@@ -320,9 +320,9 @@ export const DrillDownTable: React.FC<DrillDownTableProps> = ({
       </div>
 
       {/* HTML Table Container - auto overflow scoped inside card */}
-      <div className="overflow-x-auto rounded-xl border border-slate-200/80 dark:border-slate-800 max-w-full">
+      <div className="overflow-x-auto rounded-xl border border-slate-200/80 dark:border-white/10 max-w-full">
         <table className="w-full text-left text-xs border-collapse min-w-[700px] lg:min-w-0">
-          <thead className="bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase tracking-wider text-[10px] font-semibold border-b border-slate-200 dark:border-slate-800">
+          <thead className="bg-slate-100/80 dark:bg-[#171e2e]/90 text-slate-600 dark:text-slate-400 uppercase tracking-wider text-[10px] font-semibold border-b border-slate-200 dark:border-white/10 font-heading">
             <tr>
               <th className="py-2.5 px-3">{t("table.columnName")}</th>
               <th className="py-2.5 px-3">{t("table.columnStatus")}</th>

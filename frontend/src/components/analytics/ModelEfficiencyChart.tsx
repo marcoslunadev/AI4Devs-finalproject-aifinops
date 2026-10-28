@@ -39,13 +39,13 @@ export const ModelEfficiencyChart: React.FC<ModelEfficiencyChartProps> = ({
   const { t } = useTranslation();
 
   return (
-    <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-6 shadow-xs space-y-4 flex flex-col justify-between">
+    <div className="rounded-2xl bg-white dark:bg-[#0f1420] border border-slate-200/80 dark:border-white/10 p-6 shadow-xs space-y-4 flex flex-col justify-between">
       <div>
         <div className="flex items-center gap-2">
-          <div className="p-2 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400">
+          <div className="p-2 rounded-xl bg-amber-500/10 text-amber-500 dark:text-amber-400">
             <Gauge className="w-4 h-4" />
           </div>
-          <h3 className="text-base font-bold text-slate-900 dark:text-white">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white font-heading">
             {t("analytics.efficiencyTitle", "Matriz de Eficiencia (Latencia vs Coste)")}
           </h3>
         </div>
@@ -70,7 +70,7 @@ export const ModelEfficiencyChart: React.FC<ModelEfficiencyChartProps> = ({
               tickLine={false}
               axisLine={false}
               tick={{ fontSize: 11, fill: "currentColor" }}
-              className="text-slate-500 dark:text-slate-400"
+              className="text-slate-500 dark:text-slate-400 font-mono"
             />
             <YAxis
               type="number"
@@ -81,7 +81,7 @@ export const ModelEfficiencyChart: React.FC<ModelEfficiencyChartProps> = ({
               axisLine={false}
               tickFormatter={(v) => `$${v}`}
               tick={{ fontSize: 11, fill: "currentColor" }}
-              className="text-slate-500 dark:text-slate-400"
+              className="text-slate-500 dark:text-slate-400 font-mono"
             />
             <ZAxis type="number" dataKey="executions" range={[100, 400]} />
             <Tooltip
@@ -89,13 +89,13 @@ export const ModelEfficiencyChart: React.FC<ModelEfficiencyChartProps> = ({
                 if (active && payload && payload.length) {
                   const item = payload[0].payload as ModelEfficiencyItem;
                   return (
-                    <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 p-3 rounded-xl shadow-xl text-xs space-y-1">
-                      <p className="font-bold text-slate-900 dark:text-white">
+                    <div className="bg-white/95 dark:bg-[#0f1420]/95 backdrop-blur-md border border-slate-200 dark:border-white/10 p-3 rounded-xl shadow-xl text-xs space-y-1">
+                      <p className="font-bold text-slate-900 dark:text-white font-heading">
                         {item.model}
                       </p>
                       <div className="flex justify-between gap-4 font-mono text-slate-600 dark:text-slate-400">
                         <span>{t("analytics.avgLatencyLabel")}</span>
-                        <span className="font-bold text-indigo-600 dark:text-indigo-400">{item.latencyMs} ms</span>
+                        <span className="font-bold text-cyan-600 dark:text-cyan-400">{item.latencyMs} ms</span>
                       </div>
                       <div className="flex justify-between gap-4 font-mono text-slate-600 dark:text-slate-400">
                         <span>{t("analytics.costPer1kLabel")}</span>

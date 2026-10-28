@@ -111,13 +111,14 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-8 animate-fadeIn">
-      {/* Executive Welcome Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-900 via-indigo-800 to-purple-900 p-6 sm:p-8 text-white shadow-xl">
-        <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+      {/* Executive Welcome Banner MarcosLunaDev */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#080b11] via-[#0f1420] to-[#171e2e] border border-cyan-500/25 p-6 sm:p-8 text-white shadow-2xl">
+        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-28 -mb-10 w-64 h-64 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 space-y-3 max-w-2xl">
           <div className="flex flex-wrap items-center gap-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold text-indigo-200 border border-white/10">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 backdrop-blur-md text-xs font-semibold font-heading">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
               {t("header.badge", "Executive Overview • Live API Telemetry")}
             </div>
 
@@ -127,17 +128,17 @@ export const Dashboard: React.FC = () => {
                 {t("dashboard.ingesting", "Ingestando nuevos datos...")}
               </div>
             ) : formattedLastUpdated ? (
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 backdrop-blur-md text-xs font-medium">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 backdrop-blur-md text-xs font-medium">
                 <Clock className="w-3.5 h-3.5 text-emerald-300" />
                 {t("dashboard.lastUpdated", { time: formattedLastUpdated, defaultValue: `Última actualización: ${formattedLastUpdated}h` })}
               </div>
             ) : null}
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-heading bg-gradient-to-r from-white via-slate-100 to-cyan-200 bg-clip-text text-transparent">
             {t("header.title")}
           </h1>
-          <p className="text-sm text-indigo-200/90 leading-relaxed">
+          <p className="text-sm text-slate-300/90 leading-relaxed">
             {t("dashboard.welcomeDescription")}
           </p>
         </div>
@@ -175,7 +176,7 @@ export const Dashboard: React.FC = () => {
               change={kpis?.totalCostChange}
               description={t("kpis.totalCostDesc")}
               icon={DollarSign}
-              gradient="from-emerald-500 to-teal-600"
+              gradient="from-cyan-500 to-teal-500"
             />
 
             {/* KPI 2: Total Executions */}
@@ -185,7 +186,7 @@ export const Dashboard: React.FC = () => {
               change={kpis?.totalExecutionsChange}
               description={t("kpis.totalExecutionsDesc")}
               icon={Zap}
-              gradient="from-indigo-500 to-blue-600"
+              gradient="from-teal-500 to-emerald-500"
             />
 
             {/* KPI 3: Total Tokens */}
@@ -195,7 +196,7 @@ export const Dashboard: React.FC = () => {
               change={kpis?.totalTokensChange}
               description={t("kpis.totalTokensDesc")}
               icon={Layers}
-              gradient="from-purple-500 to-pink-600"
+              gradient="from-cyan-500 to-blue-500"
             />
 
             {/* KPI 4: Avg Cost per Execution */}
@@ -205,7 +206,7 @@ export const Dashboard: React.FC = () => {
               change={kpis?.avgCostPerExecChange}
               description={t("kpis.avgCostPerExecDesc")}
               icon={TrendingUp}
-              gradient="from-amber-500 to-orange-600"
+              gradient="from-emerald-500 to-teal-600"
             />
 
             {/* KPI 5: Active Organizations */}
@@ -216,7 +217,7 @@ export const Dashboard: React.FC = () => {
               badgeVariant={kpis?.activeOrgs ? "success" : "neutral"}
               description={t("kpis.activeOrgsDesc")}
               icon={Building}
-              gradient="from-cyan-500 to-blue-600"
+              gradient="from-cyan-400 to-emerald-500"
             />
 
             {/* KPI 6: Error Rate */}

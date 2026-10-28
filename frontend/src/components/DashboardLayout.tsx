@@ -12,7 +12,7 @@ const LayoutContent: React.FC<DashboardLayoutProps> = ({ children }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200 selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen w-full overflow-x-hidden bg-[#f8fafc] dark:bg-[#080b11] text-slate-900 dark:text-slate-200 flex flex-col font-sans transition-colors duration-200 selection:bg-cyan-500 selection:text-slate-950">
       {/* Top Header */}
       <Header />
 
@@ -23,14 +23,14 @@ const LayoutContent: React.FC<DashboardLayoutProps> = ({ children }) => {
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t border-slate-200/80 dark:border-slate-800/80 bg-white/50 dark:bg-slate-900/50 py-4 mt-12 backdrop-blur-xs">
+      <footer className="w-full border-t border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#0f1420]/70 py-4 mt-12 backdrop-blur-md">
         <div className="max-w-[1750px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-500" />
-            <span>© {new Date().getFullYear()} {t("footer.rights")}</span>
+            <span>© {new Date().getFullYear()} {t("footer.rights")} • Marcos Luna AI FinOps</span>
           </div>
           <div className="flex items-center gap-2">
-            <Activity className="w-3.5 h-3.5 text-indigo-500 animate-pulse" />
+            <Activity className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400 animate-pulse" />
             <span>{t("footer.lastSync")}</span>
           </div>
         </div>

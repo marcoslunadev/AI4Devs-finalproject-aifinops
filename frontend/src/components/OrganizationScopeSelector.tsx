@@ -24,13 +24,13 @@ export const OrganizationScopeSelector: React.FC = () => {
 
   return (
     <div className="relative flex items-center w-52 sm:w-64">
-      <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-500 dark:text-indigo-400 pointer-events-none z-10" />
+      <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-cyan-500 dark:text-cyan-400 pointer-events-none z-10" />
       <select
         value={selectedOrgId}
         onChange={handleOrgChange}
         disabled={isLoading}
         aria-label={t("common.orgSelectorLabel", "Seleccionar Entidad / Scope")}
-        className="w-full appearance-none pl-9 pr-8 py-1.5 text-xs font-medium bg-slate-100 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 rounded-lg text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition cursor-pointer shadow-xs hover:bg-slate-200/50 dark:hover:bg-slate-700/50"
+        className="w-full appearance-none pl-9 pr-8 py-2 text-xs font-medium bg-slate-100 dark:bg-[#171e2e] border border-slate-200/80 dark:border-white/10 rounded-xl text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition cursor-pointer shadow-xs hover:bg-slate-200/60 dark:hover:bg-[#1f293d]"
       >
         <option value="">{t("common.orgSelectorAll", "Todas las Entidades")}</option>
         {orgs?.map((org) => (

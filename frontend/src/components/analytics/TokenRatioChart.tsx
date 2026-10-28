@@ -37,13 +37,13 @@ export const TokenRatioChart: React.FC<TokenRatioChartProps> = ({
   const { t } = useTranslation();
 
   return (
-    <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-6 shadow-xs space-y-4 flex flex-col justify-between">
+    <div className="rounded-2xl bg-white dark:bg-[#0f1420] border border-slate-200/80 dark:border-white/10 p-6 shadow-xs space-y-4 flex flex-col justify-between">
       <div>
         <div className="flex items-center gap-2">
-          <div className="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
+          <div className="p-2 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400">
             <Layers className="w-4 h-4" />
           </div>
-          <h3 className="text-base font-bold text-slate-900 dark:text-white">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white font-heading">
             {t("analytics.ratioTitle", "Relación Input vs Output Tokens")}
           </h3>
         </div>
@@ -69,14 +69,14 @@ export const TokenRatioChart: React.FC<TokenRatioChartProps> = ({
               tickLine={false}
               axisLine={false}
               tick={{ fontSize: 11, fill: "currentColor" }}
-              className="text-slate-500 dark:text-slate-400"
+              className="text-slate-500 dark:text-slate-400 font-mono"
             />
             <YAxis
               tickLine={false}
               axisLine={false}
               tickFormatter={(v) => `${v}k`}
               tick={{ fontSize: 11, fill: "currentColor" }}
-              className="text-slate-500 dark:text-slate-400"
+              className="text-slate-500 dark:text-slate-400 font-mono"
             />
             <Tooltip
               content={({ active, payload, label }) => {
@@ -85,19 +85,19 @@ export const TokenRatioChart: React.FC<TokenRatioChartProps> = ({
                   const outputVal = payload[1]?.value as number;
                   const ratioVal = outputVal > 0 ? (inputVal / outputVal).toFixed(1) : "N/A";
                   return (
-                    <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 p-3 rounded-xl shadow-xl text-xs space-y-1.5">
-                      <p className="font-bold text-slate-800 dark:text-slate-200 border-b border-slate-100 dark:border-slate-800 pb-1">
+                    <div className="bg-white/95 dark:bg-[#0f1420]/95 backdrop-blur-md border border-slate-200 dark:border-white/10 p-3 rounded-xl shadow-xl text-xs space-y-1.5">
+                      <p className="font-bold text-slate-800 dark:text-slate-200 border-b border-slate-100 dark:border-white/10 pb-1 font-heading">
                         {label}
                       </p>
-                      <div className="flex justify-between gap-4 font-mono text-indigo-600 dark:text-indigo-400">
+                      <div className="flex justify-between gap-4 font-mono text-cyan-600 dark:text-cyan-400 font-semibold">
                         <span>{t("analytics.inputTokens")}</span>
                         <span className="font-bold">{inputVal}k</span>
                       </div>
-                      <div className="flex justify-between gap-4 font-mono text-purple-600 dark:text-purple-400">
+                      <div className="flex justify-between gap-4 font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
                         <span>{t("analytics.outputTokens")}</span>
                         <span className="font-bold">{outputVal}k</span>
                       </div>
-                      <div className="flex justify-between gap-4 font-mono text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-1">
+                      <div className="flex justify-between gap-4 font-mono text-slate-500 border-t border-slate-100 dark:border-white/10 pt-1">
                         <span>{t("analytics.ratioInputOutput")}</span>
                         <span className="font-bold text-slate-900 dark:text-white">{ratioVal}x</span>
                       </div>
@@ -112,20 +112,20 @@ export const TokenRatioChart: React.FC<TokenRatioChartProps> = ({
               align="right"
               wrapperStyle={{ paddingBottom: "8px", fontSize: "12px" }}
               formatter={(value) => (
-                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 font-heading">
                   {value === "inputTokens" ? t("analytics.legendInput") : t("analytics.legendOutput")}
                 </span>
               )}
             />
             <Bar
               dataKey="inputTokens"
-              fill="#6366f1"
+              fill="#06b6d4"
               radius={[4, 4, 0, 0]}
               barSize={14}
             />
             <Bar
               dataKey="outputTokens"
-              fill="#a855f7"
+              fill="#10b981"
               radius={[4, 4, 0, 0]}
               barSize={14}
             />

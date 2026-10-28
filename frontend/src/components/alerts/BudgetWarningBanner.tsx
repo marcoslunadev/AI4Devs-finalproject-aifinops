@@ -24,8 +24,8 @@ export const BudgetWarningBanner: React.FC = () => {
             key={alert.id}
             className={`relative overflow-hidden rounded-2xl border p-4 sm:p-5 transition-all duration-200 shadow-md ${
               isCritical
-                ? "bg-gradient-to-r from-rose-950/90 via-rose-900/80 to-slate-900 text-white border-rose-500/40 dark:border-rose-800/60"
-                : "bg-gradient-to-r from-amber-950/80 via-amber-900/70 to-slate-900 text-white border-amber-500/40 dark:border-amber-800/60"
+                ? "bg-gradient-to-r from-rose-950/90 via-rose-900/80 to-[#080b11] text-white border-rose-500/40 dark:border-rose-800/60"
+                : "bg-gradient-to-r from-amber-950/80 via-amber-900/70 to-[#080b11] text-white border-amber-500/40 dark:border-amber-800/60"
             }`}
           >
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -56,7 +56,7 @@ export const BudgetWarningBanner: React.FC = () => {
                     >
                       {isCritical ? t("alerts.criticalThreshold") : t("alerts.warningThreshold")}
                     </span>
-                    <h4 className="text-sm font-bold tracking-tight">
+                    <h4 className="text-sm font-bold tracking-tight font-heading">
                       {alert.titleKey ? t(alert.titleKey, alert.title) : alert.title}
                     </h4>
                   </div>

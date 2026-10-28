@@ -21,7 +21,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
   changePeriod = "vs mes anterior",
   description,
   icon: Icon,
-  gradient = "from-indigo-500 to-purple-600",
+  gradient = "from-cyan-500 to-emerald-500",
   badgeText,
   badgeVariant = "neutral",
 }) => {
@@ -44,16 +44,16 @@ export const KpiCard: React.FC<KpiCardProps> = ({
   const rawValueString = value !== undefined && value !== null ? String(value) : "--";
 
   return (
-    <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+    <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white dark:bg-[#0f1420] border border-slate-200/80 dark:border-white/10 p-5 shadow-xs hover:shadow-xl hover:shadow-cyan-500/10 hover:border-cyan-500/40 hover:-translate-y-1 transition-all duration-300 group">
       {/* Subtle top accent gradient glow */}
       <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${gradient} opacity-80 group-hover:opacity-100 transition-opacity`} />
       
       {/* Background ambient glow on hover */}
-      <div className="absolute -top-10 -right-10 w-28 h-28 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500 pointer-events-none" />
+      <div className="absolute -top-10 -right-10 w-28 h-28 bg-gradient-to-br from-cyan-500/10 to-emerald-500/10 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500 pointer-events-none" />
 
       {/* Top Header: Title & Icon */}
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[11px] sm:text-xs font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider leading-snug min-h-[2rem] flex items-center pr-1">
+        <span className="text-[11px] sm:text-xs font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider leading-snug min-h-[2rem] flex items-center pr-1 font-heading">
           {title}
         </span>
         <div className={`p-2.5 rounded-xl bg-gradient-to-br ${gradient} text-white shadow-md shrink-0 group-hover:scale-105 transition-transform duration-200`}>
@@ -70,14 +70,14 @@ export const KpiCard: React.FC<KpiCardProps> = ({
           {rawValueString}
         </span>
         {badgeText && (
-          <span className={`px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wide rounded-full shrink-0 ${getBadgeStyle()}`}>
+          <span className={`px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wide rounded-full shrink-0 font-heading ${getBadgeStyle()}`}>
             {badgeText}
           </span>
         )}
       </div>
 
       {/* Footer: Trend & Description */}
-      <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
+      <div className="pt-2.5 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs">
         {change !== undefined ? (
           <div className="flex items-center gap-1.5 font-semibold">
             <span
