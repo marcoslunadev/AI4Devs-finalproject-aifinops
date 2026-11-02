@@ -11,8 +11,9 @@ export class AzureAdapter implements LogAdapter {
 
     return {
       userId: row.user_id,
-      aiModel: row.ai_model || 'azure-unknown',
-      cost: row.total_cost ? parseFloat(row.total_cost) : 0,
+      provider: 'AZURE',
+      model: row.ai_model || 'azure-unknown',
+      costUsd: row.total_cost ? parseFloat(row.total_cost) : 0,
       metadata: {
         resourceId: row.resourceId,
         region: row.region,

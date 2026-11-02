@@ -20,7 +20,7 @@ export class AgentController {
 
   public getAgentById = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { agentId } = req.params;
+      const agentId = Array.isArray(req.params.agentId) ? req.params.agentId[0] : req.params.agentId;
       const agent = await this.agentRepo.findById(agentId);
 
       if (!agent) {
@@ -46,12 +46,12 @@ export class AgentController {
       res.status(200).json({
         ...agent,
         metrics: {
-          totalExecutions: aggregations._count.id,
-          totalPromptTokens: aggregations._sum.promptTokens || 0,
-          totalCompletionTokens: aggregations._sum.completionTokens || 0,
-          totalTokens: aggregations._sum.totalTokens || 0,
-          totalCostUsd: aggregations._sum.costUsd || 0,
-          avgLatencyMs: Math.round(aggregations._avg.latencyMs || 0),
+          totalExecutions: aggregations._count?.id ?? 0,
+          totalPromptTokens: aggregations._sum?.promptTokens ?? 0,
+          totalCompletionTokens: aggregations._sum?.completionTokens ?? 0,
+          totalTokens: aggregations._sum?.totalTokens ?? 0,
+          totalCostUsd: aggregations._sum?.costUsd ?? 0,
+          avgLatencyMs: Math.round(aggregations._avg?.latencyMs ?? 0),
         },
       });
     } catch (error: any) {
@@ -61,7 +61,7 @@ export class AgentController {
 
   public getAgentExecutions = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { agentId } = req.params;
+      const agentId = Array.isArray(req.params.agentId) ? req.params.agentId[0] : req.params.agentId;
       const page = Math.max(1, parseInt(req.query.page as string) || 1);
       const limit = Math.min(100, Math.max(1, parseInt(req.query.limit as string) || 20));
       const skip = (page - 1) * limit;

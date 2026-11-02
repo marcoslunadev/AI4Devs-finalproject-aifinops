@@ -11,8 +11,9 @@ export class OpenAIAdapter implements LogAdapter {
 
     return {
       userId: row.userId,
-      aiModel: row.model,
-      cost: row.cost ? parseFloat(row.cost) : 0,
+      provider: 'OPENAI',
+      model: row.model,
+      costUsd: row.cost ? parseFloat(row.cost) : 0,
       inputCost: row.promptCost ? parseFloat(row.promptCost) : 0,
       outputCost: row.completionCost ? parseFloat(row.completionCost) : 0,
       metadata: {
