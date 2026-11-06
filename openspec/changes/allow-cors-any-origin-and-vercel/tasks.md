@@ -6,7 +6,7 @@
 
 ## 2. Pruebas Automatizadas y Verificación
 
-- [ ] 2.1 Implementar tests de integración en backend para validar peticiones enviadas con el origen desplegado en Vercel (`https://ai-4-devs-finalproject-a-git-73d0ca-marcosdanielluna1s-projects.vercel.app`), verificando que se devuelva la cabecera `Access-Control-Allow-Origin` adecuada.
+- [ ] 2.1 Implementar tests de integración en backend para validar peticiones enviadas con el origen desplegado en Vercel (`https://ai-4-devs-finalproject-aifinops-r94g597j1.vercel.app`), verificando que se devuelva la cabecera `Access-Control-Allow-Origin` adecuada.
 - [ ] 2.2 Implementar tests de integración en backend con orígenes arbitrarios (ej. `https://random-client.example.com`, `http://localhost:5173`) confirmando que no se emiten errores de CORS y se responde satisfactoriamente.
 - [ ] 2.3 Implementar tests de peticiones preflight HTTP (`OPTIONS`) asegurando respuesta exitosa (`200` o `204`) con las cabeceras `Access-Control-Allow-Methods` y `Access-Control-Allow-Headers`.
 - [ ] 2.4 Validar la presencia de la cabecera `Cross-Origin-Resource-Policy: cross-origin` en las respuestas HTTP generadas por Helmet.

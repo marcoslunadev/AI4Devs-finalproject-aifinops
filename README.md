@@ -25,7 +25,7 @@ AIFinOps
 AIFinOps es una plataforma integral de observabilidad, gobernanza y FinOps de Inteligencia Artificial diseñada para monitorizar, auditar y optimizar el consumo de modelos y agentes de IA (OpenAI, Google Gemini, Anthropic, etc.) a nivel de organizaciones, departamentos y usuarios, ofreciendo visibilidad multidimensional filtrable por entornos (DEV, PRE y PRO).
 
 ### **0.4. Evidencia de funcionamiento y URLs de Despliegue:**
-* **Frontend SPA (Vercel CDN):** [https://ai-4-devs-finalproject-a-git-73d0ca-marcosdanielluna1s-projects.vercel.app/](https://ai-4-devs-finalproject-a-git-73d0ca-marcosdanielluna1s-projects.vercel.app/)
+* **Frontend SPA (Vercel CDN):** [https://ai-4-devs-finalproject-aifinops-r94g597j1.vercel.app/](https://ai-4-devs-finalproject-aifinops-r94g597j1.vercel.app/)
 * **Backend API REST (Render):** [https://aifinops-backend.onrender.com/api/v1](https://aifinops-backend.onrender.com/api/v1) *(Nota: en plan gratuito el backend entra en reposo y puede tardar ~30s en reactivarse en la primera petición)*
 * **Base de datos Cloud:** PostgreSQL 16 alojada en Neon Serverless.
 

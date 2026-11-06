@@ -1,11 +1,11 @@
 ## Why
 
-Actualmente, el despliegue del frontend en Vercel (`https://ai-4-devs-finalproject-a-git-73d0ca-marcosdanielluna1s-projects.vercel.app`) y clientes que consumen la API de AIFinOps desde diferentes dominios pueden experimentar bloqueos de CORS o restricciones de cabeceras de seguridad (como `Cross-Origin-Resource-Policy` por defecto de Helmet). Esta propuesta elimina las restricciones de origen en el backend para evitar errores de CORS ante llamadas desde cualquier dominio, garantizando el soporte explícito para el frontend de Vercel y preflights HTTP (`OPTIONS`).
+Actualmente, el despliegue del frontend en Vercel (`https://ai-4-devs-finalproject-aifinops-r94g597j1.vercel.app`) y clientes que consumen la API de AIFinOps desde diferentes dominios pueden experimentar bloqueos de CORS o restricciones de cabeceras de seguridad (como `Cross-Origin-Resource-Policy` por defecto de Helmet). Esta propuesta elimina las restricciones de origen en el backend para evitar errores de CORS ante llamadas desde cualquier dominio, garantizando el soporte explícito para el frontend de Vercel y preflights HTTP (`OPTIONS`).
 
 ## What Changes
 
 - **Configuración permisiva de CORS**: Ajustar el middleware `cors` en `backend/src/app.ts` para aceptar peticiones desde cualquier origen (`origin: true` / reflejo de origen del cliente o wildcard según corresponda) sin arrojar errores de CORS, admitiendo credenciales, métodos HTTP estándar (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `OPTIONS`) y cabeceras habituales (`Content-Type`, `Authorization`).
-- **Inclusión explícita del dominio de Vercel**: Garantizar soporte explícito y probado para `https://ai-4-devs-finalproject-a-git-73d0ca-marcosdanielluna1s-projects.vercel.app` (así como `http://localhost:5173` y `http://localhost:3000`).
+- **Inclusión explícita del dominio de Vercel**: Garantizar soporte explícito y probado para `https://ai-4-devs-finalproject-aifinops-r94g597j1.vercel.app` (así como `http://localhost:5173` y `http://localhost:3000`).
 - **Ajuste de Helmet**: Configurar Helmet con `crossOriginResourcePolicy: { policy: "cross-origin" }` (o deshabilitar CORP restrictivo) para evitar que las políticas de recursos de Helmet bloqueen respuestas cross-origin.
 - **Soporte de preflight**: Garantizar que todas las peticiones `OPTIONS` respondan correctamente con estado `200` o `204` y cabeceras CORS válidas.
 - **Cobertura de pruebas (>80%)**: Añadir y verificar tests de integración para peticiones CORS (con orígenes arbitrarios, preflight y el dominio de Vercel) asegurando un umbral >= 80%.

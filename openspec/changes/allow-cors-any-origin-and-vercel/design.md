@@ -10,7 +10,7 @@ Consultar `proposal.md` para la motivación de este cambio.
 ## Goals / Non-Goals
 
 **Goals:**
-- Configurar el middleware `cors` para admitir solicitudes desde cualquier origen (`origin: true` o función que refleje el `req.header('Origin')`), admitiendo expresamente el dominio `https://ai-4-devs-finalproject-a-git-73d0ca-marcosdanielluna1s-projects.vercel.app`, dominios locales y cualquier origen arbitrario.
+- Configurar el middleware `cors` para admitir solicitudes desde cualquier origen (`origin: true` o función que refleje el `req.header('Origin')`), admitiendo expresamente el dominio `https://ai-4-devs-finalproject-aifinops-r94g597j1.vercel.app`, dominios locales y cualquier origen arbitrario.
 - Configurar `helmet` con `crossOriginResourcePolicy: { policy: "cross-origin" }` para asegurar que las políticas CORP no interfieran con las solicitudes cross-origin.
 - Habilitar preflight requests (`OPTIONS`) de manera global para métodos `GET, POST, PUT, PATCH, DELETE, OPTIONS` y cabeceras `Content-Type, Authorization`.
 - Asegurar que la suite de pruebas unitarias/integración cubra la configuración CORS y mantenga la cobertura superior al 80%.
@@ -23,7 +23,7 @@ Consultar `proposal.md` para la motivación de este cambio.
 
 ### Decisión 1: Estrategia de origen permisiva y dinámica (`origin: true`)
 - **Elección**: Configurar `cors({ origin: true, credentials: true })` en `backend/src/app.ts`.
-- **Justificación**: En la librería `cors`, `origin: true` refleja dinámicamente el valor de la cabecera `Origin` de la solicitud en `Access-Control-Allow-Origin`. Esto permite solicitudes desde el dominio de producción de Vercel (`https://ai-4-devs-finalproject-a-git-73d0ca-marcosdanielluna1s-projects.vercel.app`), desde cualquier previsualización de Vercel (URLs efímeras de pull request), localhost y cualquier otro dominio arbitrario, sin fallar con errores de CORS y permitiendo el transporte de cabeceras de autorización.
+- **Justificación**: En la librería `cors`, `origin: true` refleja dinámicamente el valor de la cabecera `Origin` de la solicitud en `Access-Control-Allow-Origin`. Esto permite solicitudes desde el dominio de producción de Vercel (`https://ai-4-devs-finalproject-aifinops-r94g597j1.vercel.app`), desde cualquier previsualización de Vercel (URLs efímeras de pull request), localhost y cualquier otro dominio arbitrario, sin fallar con errores de CORS y permitiendo el transporte de cabeceras de autorización.
 - **Alternativas consideradas**:
   - *Lista estática en array*: Requeriría desplegar o reiniciar el backend ante cada nueva URL de preview de Vercel o nuevo dominio de consumo.
   - *`origin: "*"` con credenciales*: La especificación de Fetch y CORS prohíbe el uso de `*` si se envían credenciales (`Access-Control-Allow-Credentials: true`). El reflejo dinámico evita este conflicto.

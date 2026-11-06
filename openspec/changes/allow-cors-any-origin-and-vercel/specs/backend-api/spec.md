@@ -4,11 +4,11 @@
 La API SHALL protegerse activamente contra vectores de ataque comunes web mientras permite el consumo legítimo de la API desde cualquier origen de cliente web sin bloqueos por CORS.
 - SHALL incluir cabeceras de seguridad mediante Helmet adaptando la directiva `Cross-Origin-Resource-Policy` (`cross-origin` o permisiva) para no restringir el acceso a clientes cross-origin.
 - SHALL aceptar peticiones cross-origin (CORS) desde cualquier dominio arbitrario (`*` o reflejo de origen del solicitante), garantizando la no emisión de errores CORS ante orígenes no preconfigurados.
-- SHALL soportar expresamente el dominio de frontend desplegado en producción: `https://ai-4-devs-finalproject-a-git-73d0ca-marcosdanielluna1s-projects.vercel.app`, así como entornos locales (`http://localhost:5173`, `http://localhost:3000`).
+- SHALL soportar expresamente el dominio de frontend desplegado en producción: `https://ai-4-devs-finalproject-aifinops-r94g597j1.vercel.app`, así como entornos locales (`http://localhost:5173`, `http://localhost:3000`).
 - SHALL responder con éxito a las peticiones preflight HTTP (`OPTIONS`) retornando las cabeceras `Access-Control-Allow-Origin`, `Access-Control-Allow-Methods` y `Access-Control-Allow-Headers` permitiendo cabeceras habituales de autenticación (`Authorization`) y tipos de contenido (`Content-Type`).
 
 #### Scenario: Petición desde el Frontend desplegado en Vercel
-- **WHEN** el frontend desplegado en `https://ai-4-devs-finalproject-a-git-73d0ca-marcosdanielluna1s-projects.vercel.app` realiza una petición HTTP al backend
+- **WHEN** el frontend desplegado en `https://ai-4-devs-finalproject-aifinops-r94g597j1.vercel.app` realiza una petición HTTP al backend
 - **THEN** el sistema procesa la petición retornando el header `Access-Control-Allow-Origin` correspondiente sin errores de bloqueo de CORS ni CORP
 
 #### Scenario: Petición desde un origen arbitrario
