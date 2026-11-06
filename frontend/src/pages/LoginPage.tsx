@@ -11,13 +11,12 @@ import {
   EyeOff,
   AlertCircle,
   Loader2,
-  ShieldAlert,
-  BarChart3,
   Sun,
   Moon,
   Globe,
 } from "lucide-react";
 import { useTheme } from "../components/ThemeProvider";
+
 
 export const LoginPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -42,13 +41,6 @@ export const LoginPage: React.FC = () => {
 
   const handleLanguageChange = (lang: string) => {
     i18n.changeLanguage(lang);
-  };
-
-  const handleFillDemo = (userVal: string, passVal: string) => {
-    setIdentifier(userVal);
-    setPassword(passVal);
-    setLocalError(null);
-    clearError();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -153,30 +145,12 @@ export const LoginPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Quick Demo Access Buttons */}
-          <div className="mb-6 p-3.5 rounded-2xl bg-slate-50 dark:bg-[#171e2e]/60 border border-slate-200/80 dark:border-white/10">
-            <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 font-heading">
-              {t("auth.demoAccessTitle")}
-            </span>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => handleFillDemo("admin", "Admin_M4rc0s")}
-                className="flex items-center justify-center gap-1.5 px-2.5 py-2 text-xs font-semibold rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 transition-colors font-heading"
-              >
-                <ShieldAlert className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span>Admin</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => handleFillDemo("viewer", "Viewer_M4rc0s")}
-                className="flex items-center justify-center gap-1.5 px-2.5 py-2 text-xs font-semibold rounded-xl bg-cyan-50 hover:bg-cyan-100 dark:bg-cyan-950/40 dark:hover:bg-cyan-950/70 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800/60 transition-colors font-heading"
-              >
-                <BarChart3 className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
-                <span>Viewer</span>
-              </button>
-            </div>
-          </div>
+          {/* 
+            Credenciales de prueba para evaluación (véase README.md Sección 0.6):
+            - Administrador: admin@aifinops.com (o admin) / Admin_M4rc0s
+            - Visor FinOps: viewer@aifinops.com (o viewer) / Viewer_M4rc0s
+          */}
+
 
           {/* Error Banner */}
           {activeError && (
