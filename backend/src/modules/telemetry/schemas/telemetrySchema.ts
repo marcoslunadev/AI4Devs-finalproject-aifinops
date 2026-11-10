@@ -63,6 +63,14 @@ export const DepartmentExecutionSchema = z.object({
 
 export const DepartmentExecutionsResponseSchema = z.array(DepartmentExecutionSchema);
 
+export const ProviderDistributionItemSchema = z.object({
+  provider: z.string(),
+  cost: z.number(),
+  share: z.number(),
+});
+
+export const ProviderDistributionResponseSchema = z.array(ProviderDistributionItemSchema);
+
 export type KpiResponse = z.infer<typeof KpiResponseSchema>;
 export type ChartResponse = z.infer<typeof ChartResponseSchema>;
 export type BreakdownResponse = z.infer<typeof BreakdownResponseSchema>;
@@ -70,4 +78,5 @@ export type OrganizationItem = z.infer<typeof OrganizationItemSchema>;
 export type OrganizationsResponse = z.infer<typeof OrganizationsResponseSchema>;
 export type DepartmentExecution = z.infer<typeof DepartmentExecutionSchema>;
 export type DepartmentExecutionsResponse = z.infer<typeof DepartmentExecutionsResponseSchema>;
-
+export type ProviderDistributionItem = z.infer<typeof ProviderDistributionItemSchema>;
+export type ProviderDistributionResponse = z.infer<typeof ProviderDistributionResponseSchema>;

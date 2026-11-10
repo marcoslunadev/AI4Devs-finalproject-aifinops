@@ -3,10 +3,18 @@ import { useTranslation } from "react-i18next";
 import { ModelDistributionChart } from "../components/analytics/ModelDistributionChart";
 import { TokenRatioChart } from "../components/analytics/TokenRatioChart";
 import { ModelEfficiencyChart } from "../components/analytics/ModelEfficiencyChart";
+import { useProviderDistribution } from "../hooks/useTelemetry";
+import { type ProviderDistributionItem } from "../components/analytics/ModelDistributionChart";
 import { Cpu, Zap, Clock, Award } from "lucide-react";
 
 export const ModelAnalytics: React.FC = () => {
   const { t } = useTranslation();
+  const { data: providerDistribution = [] } = useProviderDistribution();
+  const distributionData: ProviderDistributionItem[] = providerDistribution.map((item) => ({
+    ...item,
+    provider: formatProviderName(item.provider),
+    color: providerColor(item.provider),
+  }));
 
   return (
     <div className="space-y-8 animate-fadeIn">
@@ -84,7 +92,7 @@ export const ModelAnalytics: React.FC = () => {
 
       {/* Main Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ModelDistributionChart />
+        <ModelDistributionChart data={distributionData} />
         <TokenRatioChart />
       </div>
 
@@ -95,3 +103,25 @@ export const ModelAnalytics: React.FC = () => {
     </div>
   );
 };
+
+function formatProviderName(provider: string): string {
+  const names: Record<string, string> = {
+    OPENAI: "OpenAI",
+    ANTHROPIC: "Anthropic",
+    GEMINI: "Google Gemini",
+    GOOGLE: "Google Gemini",
+    META: "Meta / Bedrock",
+  };
+  return names[provider.toUpperCase()] ?? provider;
+}
+
+function providerColor(provider: string): string {
+  const colors: Record<string, string> = {
+    OPENAI: "#10a37f",
+    ANTHROPIC: "#d97706",
+    GEMINI: "#4285f4",
+    GOOGLE: "#4285f4",
+    META: "#a855f7",
+  };
+  return colors[provider.toUpperCase()] ?? "#06b6d4";
+}

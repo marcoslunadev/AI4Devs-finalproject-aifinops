@@ -5,6 +5,7 @@ import {
   BreakdownResponse,
   OrganizationsResponse,
   DepartmentExecutionsResponse,
+  ProviderDistributionResponse,
 } from "../schemas/telemetrySchema";
 
 export class TelemetryService {
@@ -36,7 +37,7 @@ export class TelemetryService {
     provider?: string,
     models?: string[]
   ): any {
-    const where: any = { createdAt: dateRange };
+    const where: any = { executedAt: dateRange };
 
     if (organizationId) {
       where.user = where.user || {};
@@ -220,6 +221,57 @@ export class TelemetryService {
     }
   }
 
+  public async getProviderDistribution(
+    organizationId?: string,
+    environment?: string,
+    provider?: string,
+    models?: string[]
+  ): Promise<ProviderDistributionResponse> {
+    try {
+      const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+      const where = this.buildExecutionWhere(
+        { gte: thirtyDaysAgo },
+        organizationId,
+        environment,
+        provider,
+        models
+      );
+
+      const logs = await this.prisma.executionLog.findMany({
+        where,
+        select: { provider: true, costUsd: true },
+      });
+
+      const costs = new Map<string, number>();
+      for (const log of logs) {
+        const providerName = log.provider.trim().toUpperCase();
+        const cost = Number(log.costUsd ?? 0);
+        costs.set(providerName, (costs.get(providerName) ?? 0) + cost);
+      }
+
+      const distribution = Array.from(costs.entries())
+        .map(([providerName, cost]) => ({
+          provider: providerName,
+          cost: Number(cost.toFixed(2)),
+        }))
+        .sort((a, b) => b.cost - a.cost);
+      const totalCost = distribution.reduce((sum, item) => sum + item.cost, 0);
+      let allocatedShare = 0;
+
+      return distribution.map((item, index) => {
+        const share = totalCost === 0
+          ? 0
+          : index === distribution.length - 1
+            ? Number((100 - allocatedShare).toFixed(1))
+            : Number(((item.cost / totalCost) * 100).toFixed(1));
+        allocatedShare += share;
+        return { ...item, share };
+      });
+    } catch {
+      return [];
+    }
+  }
+
   public async getIngestionStatus(): Promise<{
     status: "PROCESSING" | "COMPLETED";
     lastIngestedAt: string | null;
@@ -300,14 +352,14 @@ export class TelemetryService {
         select: {
           costUsd: true,
           totalTokens: true,
-          createdAt: true,
+          executedAt: true,
           metadata: true,
         },
-        orderBy: { createdAt: "asc" },
+        orderBy: { executedAt: "asc" },
       });
 
       for (const log of logs) {
-        const d = log.createdAt ? new Date(log.createdAt) : new Date();
+        const d = log.executedAt ? new Date(log.executedAt) : new Date();
         const dateStr = d.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
         const existing = dateMap.get(dateStr);
         if (existing) {
@@ -345,7 +397,7 @@ export class TelemetryService {
       const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
       const executionLogWhere: any = {
-        createdAt: { gte: thirtyDaysAgo },
+        executedAt: { gte: thirtyDaysAgo },
       };
 
       if (models && models.length > 0) {

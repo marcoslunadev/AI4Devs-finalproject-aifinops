@@ -6,6 +6,7 @@ import {
   KpiResponseSchema,
   ChartResponseSchema,
   BreakdownResponseSchema,
+  ProviderDistributionResponseSchema,
 } from "../schemas/telemetrySchema";
 
 describe("TelemetryService", () => {
@@ -69,6 +70,62 @@ describe("TelemetryService", () => {
     expect(chart90d.length).toBe(90);
   });
 
+  it("should aggregate the last 30 days by provider and calculate shares from the same total", async () => {
+    const mockService = new TelemetryService();
+    (mockService as any).prisma = {
+      executionLog: {
+        findMany: (args: any) => {
+          expect(args.where).toHaveProperty("executedAt.gte");
+          return Promise.resolve([
+            { provider: "OPENAI", costUsd: 2.25 },
+            { provider: "openai", costUsd: 0.75 },
+            { provider: "GEMINI", costUsd: 1 },
+          ]);
+        },
+      },
+    };
+
+    const distribution = await mockService.getProviderDistribution();
+
+    expect(ProviderDistributionResponseSchema.safeParse(distribution).success).toBe(true);
+    expect(distribution).toEqual([
+      { provider: "OPENAI", cost: 3, share: 75 },
+      { provider: "GEMINI", cost: 1, share: 25 },
+    ]);
+  });
+
+  it("should group chart data by execution date instead of insertion date", async () => {
+    const executionDate = new Date();
+    executionDate.setDate(executionDate.getDate() - 5);
+    executionDate.setHours(12, 0, 0, 0);
+
+    const mockService = new TelemetryService();
+    (mockService as any).prisma = {
+      executionLog: {
+        findMany: (args: any) => {
+          expect(args.where).toHaveProperty("executedAt");
+          expect(args.where).not.toHaveProperty("createdAt");
+          return Promise.resolve([
+            {
+              costUsd: 1.25,
+              totalTokens: 1000,
+              executedAt: executionDate,
+              metadata: null,
+            },
+          ]);
+        },
+      },
+    };
+
+    const chart = await mockService.getTimeSeriesChart("30d");
+    const dateLabel = executionDate.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
+    expect(chart.find((point) => point.date === dateLabel)).toMatchObject({
+      cost: 1.25,
+      tokens: 1000,
+      executions: 1,
+    });
+  });
+
   it("should fetch hierarchical breakdown tree matching BreakdownResponseSchema", async () => {
     const breakdown = await service.getHierarchicalBreakdown();
     expect(BreakdownResponseSchema.safeParse(breakdown).success).toBe(true);
@@ -130,7 +187,7 @@ describe("TelemetryService", () => {
       },
       executionLog: {
         aggregate: (args: any) => {
-          if (args?.where?.createdAt?.lt) {
+          if (args?.where?.executedAt?.lt) {
             // previous period
             return Promise.resolve({ _sum: { cost: 50 }, _count: { id: 10 } });
           }

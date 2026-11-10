@@ -13,6 +13,7 @@ router.get("/kpis", controller.getKpis);
 router.get("/chart", controller.getChart);
 router.get("/breakdown", controller.getBreakdown);
 router.get("/department-executions", controller.getDepartmentExecutions);
+router.get("/provider-distribution", controller.getProviderDistribution);
 router.get("/status", controller.getStatus);
 
 export default router;

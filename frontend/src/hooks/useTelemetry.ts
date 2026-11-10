@@ -6,10 +6,12 @@ import {
   fetchTelemetryStatus,
   fetchOrganizations,
   fetchDepartmentExecutions,
+  fetchProviderDistribution,
   type TelemetryKpis,
   type TelemetryStatus,
   type OrganizationItem,
   type DepartmentExecution,
+  type ProviderDistribution,
   type TelemetryFilterParams,
 } from "../services/telemetryApi";
 import { type ChartDataPoint } from "../components/CostChart";
@@ -55,6 +57,22 @@ export function useDepartmentExecutions(organizationId?: string) {
   return useQuery<DepartmentExecution[], Error>({
     queryKey: ["telemetry", "department-executions", organizationId || "all"],
     queryFn: () => fetchDepartmentExecutions(organizationId),
+    staleTime: 60 * 1000,
+    retry: 2,
+  });
+}
+
+export function useProviderDistribution(filters?: TelemetryFilterParams) {
+  return useQuery<ProviderDistribution[], Error>({
+    queryKey: [
+      "telemetry",
+      "provider-distribution",
+      filters?.organizationId || "all",
+      filters?.environment || "ALL",
+      filters?.provider || "all",
+      filters?.models?.join(",") || "all",
+    ],
+    queryFn: () => fetchProviderDistribution(filters),
     staleTime: 60 * 1000,
     retry: 2,
   });

@@ -51,6 +51,12 @@ describe("TelemetryController", () => {
     expect(res.json).toHaveBeenCalledWith(expect.any(Array));
   });
 
+  it("getProviderDistribution should respond with HTTP 200 and provider distribution array", async () => {
+    await controller.getProviderDistribution(req, res);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(expect.any(Array));
+  });
+
   it("getStatus should respond with HTTP 200 and ingestion status", async () => {
     await controller.getStatus(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
@@ -65,6 +71,7 @@ describe("TelemetryController", () => {
       getTimeSeriesChart: vi.fn().mockRejectedValue(new Error("Database error")),
       getHierarchicalBreakdown: vi.fn().mockRejectedValue(new Error("Database error")),
       getDepartmentExecutions: vi.fn().mockRejectedValue(new Error("Database error")),
+      getProviderDistribution: vi.fn().mockRejectedValue(new Error("Database error")),
       getIngestionStatus: vi.fn().mockRejectedValue(new Error("Database error")),
     };
 
@@ -81,6 +88,9 @@ describe("TelemetryController", () => {
     expect(res.status).toHaveBeenCalledWith(500);
 
     await controller.getDepartmentExecutions(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+
+    await controller.getProviderDistribution(req, res);
     expect(res.status).toHaveBeenCalledWith(500);
 
     await controller.getStatus(req, res);

@@ -6,6 +6,7 @@ import {
   BreakdownResponseSchema,
   OrganizationsResponseSchema,
   DepartmentExecutionsResponseSchema,
+  ProviderDistributionResponseSchema,
 } from "../schemas/telemetrySchema";
 
 export class TelemetryController {
@@ -79,6 +80,27 @@ export class TelemetryController {
       const organizationId = req.query.organizationId as string | undefined;
       const data = await this.telemetryService.getDepartmentExecutions(organizationId);
       const validated = DepartmentExecutionsResponseSchema.parse(data);
+      res.status(200).json(validated);
+    } catch (error: any) {
+      res.status(500).json({ error: "Internal server error", details: error.message });
+    }
+  };
+
+  public getProviderDistribution = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const organizationId = req.query.organizationId as string | undefined;
+      const environment = req.query.environment as string | undefined;
+      const provider = req.query.provider as string | undefined;
+      const modelsStr = req.query.models as string | undefined;
+      const models = modelsStr ? modelsStr.split(",").map((s) => s.trim()).filter(Boolean) : undefined;
+
+      const data = await this.telemetryService.getProviderDistribution(
+        organizationId,
+        environment,
+        provider,
+        models
+      );
+      const validated = ProviderDistributionResponseSchema.parse(data);
       res.status(200).json(validated);
     } catch (error: any) {
       res.status(500).json({ error: "Internal server error", details: error.message });

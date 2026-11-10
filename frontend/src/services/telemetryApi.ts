@@ -36,6 +36,12 @@ export interface DepartmentExecution {
   avgLatencyMs: number;
 }
 
+export interface ProviderDistribution {
+  provider: string;
+  cost: number;
+  share: number;
+}
+
 export interface TelemetryStatus {
   status: "PROCESSING" | "COMPLETED";
   lastIngestedAt: string | null;
@@ -102,6 +108,14 @@ export async function fetchDepartmentExecutions(organizationId?: string): Promis
     params.organizationId = organizationId;
   }
   const response = await api.get<DepartmentExecution[]>("/telemetry/department-executions", { params });
+  return response.data;
+}
+
+export async function fetchProviderDistribution(
+  filters?: TelemetryFilterParams
+): Promise<ProviderDistribution[]> {
+  const params = buildFilterParams(filters);
+  const response = await api.get<ProviderDistribution[]>("/telemetry/provider-distribution", { params });
   return response.data;
 }
 

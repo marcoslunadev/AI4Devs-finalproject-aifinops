@@ -21,15 +21,8 @@ interface ModelDistributionChartProps {
   data?: ProviderDistributionItem[];
 }
 
-const DEFAULT_DATA: ProviderDistributionItem[] = [
-  { provider: "OpenAI (GPT-4o / GPT-4o-mini)", cost: 2450.8, share: 54.1, color: "#10a37f" },
-  { provider: "Anthropic (Claude 3.5 Sonnet)", cost: 1240.5, share: 27.4, color: "#d97706" },
-  { provider: "Google (Gemini 1.5 Pro)", cost: 580.2, share: 12.8, color: "#4285f4" },
-  { provider: "Meta / Bedrock (Llama 3)", cost: 257.0, share: 5.7, color: "#a855f7" },
-];
-
 export const ModelDistributionChart: React.FC<ModelDistributionChartProps> = ({
-  data = DEFAULT_DATA,
+  data = [],
 }) => {
   const { t } = useTranslation();
 
