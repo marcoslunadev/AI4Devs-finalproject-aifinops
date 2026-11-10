@@ -125,9 +125,15 @@ describe("IngestionService & AgentRepository Integration", () => {
   it("POST /api/v1/ingestion/upload - debe aceptar un archivo válido y responder 202 con batchId", async () => {
     const request = (await import("supertest")).default;
     const app = (await import("../../../app")).default;
+    const jwt = (await import("jsonwebtoken")).default;
+    const token = jwt.sign(
+      { id: "admin-test", email: "admin@aifinops.com", role: "ADMIN" },
+      process.env.JWT_SECRET || "super_secret_jwt_key_aifinops_2026"
+    );
 
     const res = await request(app)
       .post("/api/v1/ingestion/upload")
+      .set("Authorization", `Bearer ${token}`)
       .attach("file", tempFilePath);
 
     expect(res.status).toBe(202);
@@ -143,8 +149,16 @@ describe("IngestionService & AgentRepository Integration", () => {
   it("POST /api/v1/ingestion/upload - debe rechazar peticiones sin archivo con 400", async () => {
     const request = (await import("supertest")).default;
     const app = (await import("../../../app")).default;
+    const jwt = (await import("jsonwebtoken")).default;
+    const token = jwt.sign(
+      { id: "admin-test", email: "admin@aifinops.com", role: "ADMIN" },
+      process.env.JWT_SECRET || "super_secret_jwt_key_aifinops_2026"
+    );
 
-    const res = await request(app).post("/api/v1/ingestion/upload");
+    const res = await request(app)
+      .post("/api/v1/ingestion/upload")
+      .set("Authorization", `Bearer ${token}`);
+
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty("error");
   });

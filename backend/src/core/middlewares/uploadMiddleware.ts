@@ -15,5 +15,20 @@ const storage = multer.diskStorage({
   }
 });
 
-// Crear el middleware multer
-export const uploadMiddleware = multer({ storage });
+// Crear el middleware multer con hardening contra DoS y tipos de archivo no válidos
+export const uploadMiddleware = multer({
+  storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB máximo
+  },
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (ext === '.json' || ext === '.jsonl') {
+      cb(null, true);
+    } else {
+      const err: any = new Error('Formato de archivo no soportado. Debe ser .json o .jsonl');
+      err.status = 400;
+      cb(err);
+    }
+  },
+});
