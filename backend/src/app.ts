@@ -17,7 +17,7 @@ app.use(
 );
 
 const allowedOrigins = [
-  "https://ai-4-devs-finalproject-aifinops-r94g597j1.vercel.app",
+  "https://ai-4-devs-finalproject-aifinops.vercel.app",
   "http://localhost:5173",
   "http://localhost:3000",
   ...(process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",").map((o) => o.trim()) : []),

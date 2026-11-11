@@ -3,7 +3,7 @@ import request from "supertest";
 import app from "../../app";
 
 describe("CORS and Security Headers Integration Tests", () => {
-  const vercelOrigin = "https://ai-4-devs-finalproject-aifinops-r94g597j1.vercel.app";
+  const vercelOrigin = "https://ai-4-devs-finalproject-aifinops.vercel.app";
   const arbitraryOrigin = "https://arbitrary-client.enterprise.org";
   const localhostOrigin = "http://localhost:5173";
 
